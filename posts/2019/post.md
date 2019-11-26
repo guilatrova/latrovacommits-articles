@@ -28,15 +28,15 @@ From their official site, they claim:
 > Ansible is a universal language, unraveling the mystery of how work gets done. Turn tough tasks into repeatable playbooks. Roll out enterprise-wide protocols with the push of a button.
 
 
-## Backing up all my data with a press of a button
+## Backing up all my data with a single command
 
 Rules the playbook should follow to be useful:
 
 **1. Should be stored in the Cloud**
-I don't want to worry about having any free space in pendrives or bothering to carry them around. I like having my data always available to me no matter where I am. I decided to go with AWS S3 for this.
+I don't want to worry about having any free space in pen drives or bothering to carry them around. I like having my data always available to me no matter where I am. I decided to go with AWS S3 for this.
 
 **2. Customizable**
-It should be extremely simple to allow adding and removing system paths from my backup. I decided to go by setting up a list of variables, that would follow the simplest format possible:
+It should be extremely easy to add and remove system paths from my backup. I decided to go by setting up a list of variables, that would follow the most simple format possible:
 
 ```yaml
 {
@@ -50,23 +50,25 @@ I should be able to rerun it as many times as I want with a single command, for 
 
 ### Result
 
-It's so incredibly simple with Ansible, since we can just use `s3_sync` module: https://github.com/guilatrova/base-dev-setup/blob/master/roles/backup/tasks/main.yml
+It's so incredibly simple with Ansible since we can just use `s3_sync` module: https://github.com/guilatrova/base-dev-setup/blob/master/roles/backup/tasks/main.yml
 
-Also you should be able to filter files (instead of backing up the whole folder contents): https://github.com/guilatrova/base-dev-setup/blob/master/vars/backup.example.yml
+Also, you can filter files (instead of backing up the whole folder contents): https://github.com/guilatrova/base-dev-setup/blob/master/vars/backup.example.yml
 
-I did my best to backup my keybindings, unfortunately I couldn't make it work properly.
+I did my best to back up my keybindings. I couldn't make it work, though.
 
 ## Restoring all data back
 
-Well, just backing up and not getting it back as easy as before sounds like a problem to me. That's why restoring the data should follow the same logic with additional concerns:
+Well, just backing up and not getting it back as easy as before sounds like a problem to me. That's why the playbook for restoring the data should follow the same logic with additional concerns:
 
 **1. Restored files should go back to their original place**
+I don't want to worry about moving files. If I have to do any backup step manually, it's not good enough.
 
 **2. Handle cases where restored files live in a protected directory**
+There are a couple of files, binaries and scripts I like to keep under `/usr/local/bin`, but this directory has writing protection by default. The same backup vars will handle a `sudo: true` prop to specify it requires proper permissions to write to that place.
 
-**3. Install (or update) packages and binaries**
+**3. Packages and binaries should be installed or updated**
 
-**4. Restore configs**
+**4. Configs might be restored**
 
 
 ---
