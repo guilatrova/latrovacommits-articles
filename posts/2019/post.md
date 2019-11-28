@@ -36,7 +36,7 @@ Rules the playbook should follow to be useful:
 I don't want to worry about having any free space in pen drives or bothering to carry them around. I like having my data always available to me no matter where I am. I decided to go with AWS S3 for this.
 
 **2. Customizable**
-It should be extremely easy to add and remove system paths from my backup. I decided to go by setting up a list of variables, that would follow the most simple format possible:
+It should be extremely easy to add and remove system paths from my backup. I decided to go by setting up a list of variables that would follow the most simple format possible:
 
 ```yaml
 {
@@ -46,7 +46,7 @@ It should be extremely easy to add and remove system paths from my backup. I dec
 ```
 
 **3. Easy to trigger**
-I should be able to rerun it as many times as I want with a single command, for this case, it would be: `ansible-playbook playbooks/backup.yml`.
+I should be able to rerun it as many times as I want with a single command without prompts, for this case, it would be: `ansible-playbook playbooks/backup.yml`.
 
 ### Result
 
@@ -55,20 +55,87 @@ It's so incredibly simple with Ansible since we can just use `s3_sync` module: h
 Also, you can filter files (instead of backing up the whole folder contents): https://github.com/guilatrova/base-dev-setup/blob/master/vars/backup.example.yml
 
 I did my best to back up my keybindings. I couldn't make it work, though.
+Feel free to create a PR if you know a solution for this 😃.
 
 ## Restoring all data back
 
-Well, just backing up and not getting it back as easy as before sounds like a problem to me. That's why the playbook for restoring the data should follow the same logic with additional concerns:
+Well, just backing up and not getting it back as easy as before sounds like "not good enough" to me. That's why the playbook for restoring the data should follow the same logic with additional concerns:
 
 **1. Restored files should go back to their original place**
-I don't want to worry about moving files. If I have to do any backup step manually, it's not good enough.
+I don't want to worry about moving files. If I have to do any backup step manually, it's simply not good enough.
 
 **2. Handle cases where restored files live in a protected directory**
-There are a couple of files, binaries and scripts I like to keep under `/usr/local/bin`, but this directory has writing protection by default. The same backup vars will handle a `sudo: true` prop to specify it requires proper permissions to write to that place.
+There are a couple of files, binaries, and scripts I like to keep under `/usr/local/bin`, but this directory has writing protection by default. So sticking to the simplicity goal, the vars file should handle a `sudo: true` prop to specify it requires proper permissions to write to that place.
 
 **3. Packages and binaries should be installed or updated**
 
-**4. Configs might be restored**
+I'm not into installing Slack again. I mean, I love setting up my VSCodium IDE, but every time?
+Since my computer is my work tool, I need it ready to be used as soon as possible to keep going with my work.
+
+So, this playbook should be able to handle installation (and why not updates?) of all my work tools.
+
+Here's a list of some tools/binaries it installs:
+
+- git
+- docker
+- vscodium
+- mysqlcli
+- dbeaver
+- npm
+- circleci
+- slack
+- zoom
+- terraform
+- kubectl
+- aws-iam-authenticator
+- shellcheck
+- tilda
+- wtfutil
+- moo.do
+- tusk
+- spotify
+- postman
+- gitkraken
+
+Some of them may sound new to you, I'll present some of them as a bonus in the end of this article 😃
+
+There's more, feel free to explore the [task](https://github.com/guilatrova/base-dev-setup/blob/master/roles/packages/tasks/main.yml) yourself.
+
+It was designed to allow easy remove/replace of tools, so if you don't want to install cicleci cli for example, it would be as easy as deleting the following lines:
+
+```yaml
+- import_tasks: dev/circleci.yml
+  tags: circleci, binaries, dev
+```
+
+The same applies if you're willing on just updating/reinstalling some tool. You should be able to filter it by tags.
+
+**4. Repositories should be cloned again**
+Well, I'm working following a microservices architecture. What means I have several "micro" repositories with its own purposes. I hate when I try to open a repository that I haven't cloned yet.
+
+That's why the last piece of the whole process is cloning all repositories I'm using.
+
+I have split it by 2 main groups "personal" and "company", so you can clone both repositories in different folders if you want.
+
+The same "easy to customize" logic applies here, you have vars where you just have to specify a list of repositories and then ansible will do everything for you:
+
+```yaml
+company_org: "my-company-org"
+company_repo_dest: "{{ home_folder }}/my-company/"
+company_repos:
+  - "my-company-repo"
+  - "my-second-company-repo"
+```
+## What else can I do with Ansible?
+
+As you have noticed, ansible can automate **pretty much anything**. If your company still doesn't use an automation tool, start noticing what repeated steps you/your team repeats every week. From backups (as showed here) to [adding new members and managing roles on AWS](https://docs.ansible.com/ansible/latest/modules/iam_module.html), Ansible may help you!
+
+In a century where companies and startups are willing to deliver more and hit market faster, we need to figure out ways to do less while still doing more.
+
+The sooner your company realizes how much time it can save by automating repetitive tasks, sooner it will allocate more meaningful work for its engineers that brings actual value to its product.
+
+## 🚀 Bonus: Tools suggestions to boost productivity and privacy
+
 
 
 ---
