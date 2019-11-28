@@ -128,7 +128,7 @@ company_repos:
 ```
 ## What else can I do with Ansible?
 
-As you have noticed, ansible can automate **pretty much anything**. If your company still doesn't use an automation tool, start noticing what repeated steps you/your team repeats every week. From backups (as showed here) to [adding new members and managing roles on AWS](https://docs.ansible.com/ansible/latest/modules/iam_module.html), Ansible may help you!
+As you have noticed, ansible can automate **pretty much anything**. If your company still doesn't use an automation tool, start noticing what repeated steps you/your team takes every week. From backups (as showed here) to [adding new members and managing roles on AWS](https://docs.ansible.com/ansible/latest/modules/iam_module.html), Ansible may help you!
 
 In a century where companies and startups are willing to deliver more and hit market faster, we need to figure out ways to do less while still doing more.
 
@@ -136,7 +136,7 @@ The sooner your company realizes how much time it can save by automating repetit
 
 ## 🚀 Bonus: Tools suggestions to boost productivity and privacy
 
-
+You might have noticed that I got a couple tools being installed
 
 ---
 
