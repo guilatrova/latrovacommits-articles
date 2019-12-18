@@ -18,7 +18,7 @@ jobs:
       - run:
           name: Grab posts that changed
           command: |
-            POSTS=$(git diff --name-only --diff-filter=am master)
+            POSTS=$(git diff --name-only --diff-filter=am origin/master)
             echo 'export POSTS="'"$POSTS"'"' >> $BASH_ENV
 
       - run:
