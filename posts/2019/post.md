@@ -136,27 +136,26 @@ The sooner your company realizes how much time it can save by automating repetit
 
 ## 🚀 Bonus: Tools suggestions to boost productivity and privacy
 
-You might have noticed that I got a couple tools being installed
+You might have noticed that I got a couple interesting tools being installed, like [VSCodium](https://vscodium.com/) (instead of VSCode) and [Moo.do](https://www.moo.do/).
 
----
+Let me present to you some of my daily tool choices (and why) that might help you.
 
-## What else can I do with Ansible?
+#### VSCodium
 
-Also, I really believe it's a healthy behavior to fresh install all your system from time to time, so hopefully such tool can help you start a good habit and get it done really quick.
-After doing this process a couple times for Ubuntu 18.04, I started taking notes about everything that I do frequently: install this, install that, set this up, etc.
+It's just a _VSCode without Microsoft telemetry/tracking_. From their homepage:
 
-Across all those reinstalls I made, I was developing and contributing to some solutions in my current company to manage cloud resources with both terraform and ansible, I realized that ansible would do a perfect work for what I want on every new system:
+> Microsoft’s vscode source code is open source (MIT-licensed), but the product available for download (Visual Studio Code) is licensed under this not-FLOSS license and contains telemetry/tracking. According to this comment from a Visual Studio Code maintainer: [...]
 
-Load my backup
-Install packages and apps I use daily
-Set up my personal keybindings and preferences
+#### Shellcheck
 
-Introduction to Ansible
-Let me start this giving you some overview about how ansible works...
+**It's a MUST for any developer that creates bash scripts** from once in a while. It lints your code and helps you avoid some known mistakes.
 
-Storing and loading backups
-That's a tedious task of copying and pasting somewhere (often to a regular pendrive).
+#### wtfutil
 
-As soon as you know which file paths matter for you, you can easily automate this flow. For that job I decided to use S3, since I'm really not expecting to access any of this on cloud, but just storing and restoring, I think it does the job :)
+Besides the funny name, this tool is very useful (running in Tilda) and helps me keep an eye on the latest [Hacker News](https://news.ycombinator.com) and my current Jira tasks.
 
-Installing packages and apps
+[image here]
+
+#### Moo.do
+
+That's my favorite tool to help me focus on what matters, without loosing track of my emails and important events in my agenda. It's insanely easy to use, you can make a task an event, an email a task and so on.
