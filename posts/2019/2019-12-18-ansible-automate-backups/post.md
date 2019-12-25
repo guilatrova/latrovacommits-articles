@@ -152,7 +152,7 @@ It's just a _VSCode without Microsoft telemetry/tracking_. From their homepage:
 
 #### wtfutil
 
-Besides the funny name, this tool is very useful (running in Tilda) and helps me keep an eye on the latest [Hacker News](https://news.ycombinator.com) and my current Jira tasks.
+Besides the funny name, this tool is very useful (I like to run it in Tilda) and helps me keep an eye on the latest [Hacker News](https://news.ycombinator.com) and my current Jira tasks.
 
 ![wtfutil running in tilda](wtfutil.png)
 
