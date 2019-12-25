@@ -18,7 +18,7 @@ The main reason for doing this is to migrate between linux dists smoothly and ge
 
 That's why I'm going to show you how Ansible can speed you up on setting your environment. Hopefully, it will give some insights on why DevOps is a MUST for every company (and regular developer) nowadays that want to increase productivity. 
 
-If you're curious to see the final result, head out to https://github.com/guilatrova/base-dev-setup/
+If you're curious to see the final result, head out to [https://github.com/guilatrova/base-dev-setup/](https://github.com/guilatrova/base-dev-setup/)
 
 ## Why Ansible?
 
@@ -50,9 +50,9 @@ I should be able to rerun it as many times as I want with a single command witho
 
 ### Result
 
-It's so incredibly simple with Ansible since we can just use `s3_sync` module: https://github.com/guilatrova/base-dev-setup/blob/master/roles/backup/tasks/main.yml
+It's so incredibly simple with Ansible since we can just use `s3_sync` module: [https://github.com/guilatrova/base-dev-setup/blob/master/roles/backup/tasks/main.yml](https://github.com/guilatrova/base-dev-setup/blob/master/roles/backup/tasks/main.yml)
 
-Also, you can filter files (instead of backing up the whole folder contents): https://github.com/guilatrova/base-dev-setup/blob/master/vars/backup.example.yml
+Also, you can filter files (instead of backing up the whole folder contents): [https://github.com/guilatrova/base-dev-setup/blob/master/vars/backup.example.yml](https://github.com/guilatrova/base-dev-setup/blob/master/vars/backup.example.yml)
 
 I did my best to back up my keybindings. I couldn't make it work, though.
 Feel free to create a PR if you know a solution for this 😃.
