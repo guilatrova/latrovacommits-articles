@@ -1,8 +1,8 @@
 ---
-tags: [DevOps, Ubuntu, Productivity]
+tags: [DevOps, Ubuntu, Productivity, ansible]
 ---
 
-# As a DevOps here's how you should be doing your backups and getting back to work quickly
+# As a DevOps here's how you should be doing your backups
 
 As a DevOps engineer, there's nothing that I do today that I don't consider how I can automate to be faster and more productive and
 recently I noticed everything I have always been doing after formatting my dev notebook, which is pretty much:
