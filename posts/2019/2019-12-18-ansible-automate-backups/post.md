@@ -41,7 +41,7 @@ It should be extremely easy to add and remove system paths from my backup. I dec
 ```yaml
 {
     remote: CLOUD_FOLDER,
-    local: LOCAL_FOLDER"
+    local: LOCAL_FOLDER
 }
 ```
 
