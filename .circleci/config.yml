@@ -16,6 +16,10 @@ jobs:
           command: go get -u github.com/cjoudrey/md2medium
 
       - run:
+          name: Test it
+          command: md2medium -h
+
+      - run:
           name: Grab posts that changed
           command: |
             POSTS=$(git diff --name-only --diff-filter=am origin/master)
