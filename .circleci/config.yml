@@ -42,14 +42,20 @@ jobs:
           name: Setup config
           command: |
             echo '{"github_access_token":"'"$GH_TOKEN"'",
-                  "medium_access_token":"'"$MD_US_TOKEN"'",
-                  "medium_user_id":"'"$MD_US_UID"'"}' > "$HOME/.md2medium"
+                  "medium_access_token":"'"<< parameters.md_token >>"'",
+                  "medium_user_id":"'"<< parameters.md_user_id >>"'"}' > "$HOME/.md2medium"
 
       - run:
           name: Grab posts that changed
           command: |
             POSTS=$(git diff --name-only --diff-filter=AM origin/master | grep << parameters.lang >>)
-            echo 'export POSTS="'"$POSTS"'"' >> $BASH_ENV
+
+            if [ -z "$POSTS" ]; then
+              echo "No post found to publish"
+              circleci-agent step halt
+            else
+              echo 'export POSTS="'"$POSTS"'"' >> $BASH_ENV
+            fi
 
       - run:
           name: Output posts
@@ -57,12 +63,7 @@ jobs:
 
       - run:
           name: Publish post
-          command: |
-            if [ -z "$POSTS" ]; then
-              echo "No post found to publish"
-            else
-              md2medium $POSTS
-            fi
+          command: md2medium $POSTS
 
 workflows:
   version: 2
