@@ -16,8 +16,11 @@ jobs:
           command: go get -u github.com/cjoudrey/md2medium
 
       - run:
-          name: Test it
-          command: md2medium -h
+          name: Setup config
+          command: |
+            echo '{"github_access_token":"'"$GH_TOKEN"'",
+                  "medium_access_token":"'"$MD_US_TOKEN"'",
+                  "medium_user_id":"'"$MD_US_UID"'"}' > "$HOME/.md2medium"
 
       - run:
           name: Grab posts that changed
