@@ -14,10 +14,10 @@ jobs:
       - run:
           name: Show posts that changed
           command: |
-            POSTS=$(git diff --name-only --diff-filter=AM origin/master)
-            echo 'export POSTS="'"$POSTS"'"' >> $BASH_ENV
+            POST=$(git diff --name-only --diff-filter=AM origin/master)
+            echo 'export POST="'"$POST"'"' >> $BASH_ENV
 
-            echo "The following posts will be published:$POSTS"
+            echo "The following posts will be published:$POST"
 
   publish_medium_story:
     executor: default
@@ -48,22 +48,22 @@ jobs:
       - run:
           name: Grab posts that changed
           command: |
-            POSTS=$(git diff --name-only --diff-filter=AM origin/master | grep << parameters.lang >>)
+            POST=$(git diff --name-only --diff-filter=AM origin/master | grep "<< parameters.lang >>")
 
-            if [ -z "$POSTS" ]; then
+            if [ -z "$POST" ]; then
               echo "No post found to publish"
               circleci-agent step halt
             else
-              echo 'export POSTS="'"$POSTS"'"' >> $BASH_ENV
+              echo 'export POST="'"$POST"'"' >> $BASH_ENV
             fi
 
       - run:
           name: Output posts
-          command: echo "The following posts will be published:$POSTS"
+          command: echo "The following posts will be published:$POST"
 
       - run:
           name: Publish post
-          command: md2medium $POSTS
+          command: md2medium $POST
 
 workflows:
   version: 2
