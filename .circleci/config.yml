@@ -14,7 +14,7 @@ jobs:
       - run:
           name: Show posts that changed
           command: |
-            POSTS=$(git diff --name-only --diff-filter=am origin/master)
+            POSTS=$(git diff --name-only --diff-filter=AM origin/master)
             echo 'export POSTS="'"$POSTS"'"' >> $BASH_ENV
 
             echo "The following posts will be published:$POSTS"
@@ -48,7 +48,7 @@ jobs:
       - run:
           name: Grab posts that changed
           command: |
-            POSTS=$(git diff --name-only --diff-filter=am origin/master | grep << parameters.lang >>)
+            POSTS=$(git diff --name-only --diff-filter=AM origin/master | grep << parameters.lang >>)
             echo 'export POSTS="'"$POSTS"'"' >> $BASH_ENV
 
       - run:
