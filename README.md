@@ -26,8 +26,8 @@ Tool for publishing: https://github.com/cjoudrey/md2medium
 ### 🧬 Code Structure
 
 - High level folder will be year.
-- Every post will have up to 2 lang versions (it can be less or more, it should be flexible).
-- Every post might contains photos, so it makes sense to keep posts "directory wide".
+- Every post may contain more language versions (it can be less or more, it should be flexible).
+- Every post might contains pictures, so it makes sense to keep posts "directory wide".
 
 So we end up with something like:
 
@@ -39,12 +39,12 @@ So we end up with something like:
        img0.jpg
 
     2019-02-30_topic-y/
-       post.md
+       post.en-us.md
        ref.jpg
 
 2018/
    2018-10-10_article-x/
-       post.md
+       post.pt-br.md
        thingx.png
        that.png
 ```
@@ -56,12 +56,12 @@ So we end up with something like:
 
 ### 🤖 CircleCI flow
 
-- Identify the new post with `git diff`
-- Considering every commit/branch should contain only 1 new post, the result will always be one post changed
-- ~~Assess quality (possibly using grammarly API)~~
-- CircleCI will manage different tokens for different apps
-- Wait user approval to publish
-- Once approved, article is published
+- Identify the new post with `git diff`.
+- Considering every commit/branch should contain only 1 new post, the result will always be one post changed.
+- ~~Assess quality (possibly using grammarly API)~~.
+- CircleCI will manage different tokens for different apps.
+- Wait user approval to publish.
+- Once approved, article is published.
 
 ## References
 
