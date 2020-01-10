@@ -34,7 +34,7 @@ jobs:
 
       - run:
           name: Publish post
-          command: md2medium $POSTS
+          command: md2medium posts/2019/2019-12-18-ansible-automate-backups/post.en-us.md
 
 workflows:
   version: 2
