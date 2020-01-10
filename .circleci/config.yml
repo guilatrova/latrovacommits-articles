@@ -12,6 +12,29 @@ jobs:
       - checkout
 
       - run:
+          name: Show posts that changed
+          command: |
+            POSTS=$(git diff --name-only --diff-filter=am origin/master)
+            echo 'export POSTS="'"$POSTS"'"' >> $BASH_ENV
+
+            echo "The following posts will be published:$POSTS"
+
+  publish_medium_story:
+    executor: default
+    parameters:
+      lang:
+        type: enum
+        default: en-us
+        enum: ["en-us", "pt-br"]
+      md_token:
+        type: string
+      md_user_id:
+        type: string
+
+    steps:
+      - checkout
+
+      - run:
           name: Install dependencies
           command: go get -u github.com/cjoudrey/md2medium
 
@@ -25,7 +48,7 @@ jobs:
       - run:
           name: Grab posts that changed
           command: |
-            POSTS=$(git diff --name-only --diff-filter=am origin/master)
+            POSTS=$(git diff --name-only --diff-filter=am origin/master | grep << parameters.lang >>)
             echo 'export POSTS="'"$POSTS"'"' >> $BASH_ENV
 
       - run:
@@ -34,7 +57,12 @@ jobs:
 
       - run:
           name: Publish post
-          command: md2medium posts/2019/2019-12-18-ansible-automate-backups/post.en-us.md
+          command: |
+            if [ -z "$POSTS" ]; then
+              echo "No post found to publish"
+            else
+              md2medium $POSTS
+            fi
 
 workflows:
   version: 2
@@ -42,3 +70,24 @@ workflows:
   build_deploy:
     jobs:
       - build
+
+      - publish_medium_approval:
+          type: approval
+          requires:
+            - build
+
+      - publish_medium_story:
+          name: publish_medium_story_EN-US
+          lang: en-us
+          md_token: $MD_US_TOKEN
+          md_user_id: $MD_US_UID
+          requires:
+            - publish_medium_approval
+
+      - publish_medium_story:
+          name: publish_medium_story_PT-BR
+          lang: pt-br
+          md_token: $MD_BR_TOKEN
+          md_user_id: $MD_BR_UID
+          requires:
+            - publish_medium_approval
