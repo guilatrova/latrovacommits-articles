@@ -13,7 +13,7 @@ And looks like that's a pretty common question from anyone coming from a typed l
 
 Please, note how all these questions always mentions: _"Well, in Java/C#/other language..."_. Let me interrupt it right there because, **well, you're not in Java, C# or anything else**, so how should you face this problem?
 
-# What's Inversion of Control and why should I care about?
+# 🤔 What's Inversion of Control and why should I care about?
 
 Let me make it simple, inversion of control states that your code should respect two rules:
 
@@ -64,7 +64,7 @@ Cool, got it, why should I care? Well, it brings us a couple of benefits:
 
 This makes your code insanely scalable, **you should write code like that always**.
 
-## Python does not have interfaces
+## ⛓️ Python does not have interfaces
 
 That's damn trick, how am I suppose to depend on abstractions if Python doesn't support interfaces?
 
@@ -80,3 +80,9 @@ And guess what? Python supports it (I won't talk about the diamond problem cause
 > Languages that allow only single inheritance, where a class can only derive from one base class, do not have the diamond problem. The reason for this is that such languages have at most one implementation of any method at any level in the inheritance chain regardless of the repetition or placement of methods. Typically these languages allow classes to implement multiple protocols, called interfaces in Java. These protocols define methods but do not provide concrete implementations. This strategy has been used by ActionScript, C#, D, Java, Nemerle, Object Pascal, Objective-C, Smalltalk, Swift and PHP.[13] All these languages allow classes to implement multiple protocols.
 
 [_From Wikipedia._](https://en.wikipedia.org/wiki/Multiple_inheritance)
+
+Ok, but **how can I enforce a contract, then?** How can I guarantee that my implementation has all required methods and details?
+
+Well, that brings us to the next topic, which is:
+
+## 🦆 Python is dynamically typed
