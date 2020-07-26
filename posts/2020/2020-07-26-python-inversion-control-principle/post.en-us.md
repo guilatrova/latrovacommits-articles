@@ -1,5 +1,7 @@
 # Thoughts on Python Dependency Injection
 
+// TODO: Make clear difference between IOC, DI and IOC framework
+
 The first thing that I thought that was missing when I came from a C# background to Python was:
 
 > What should I use for Dependency Injection? How can I create interfaces?
@@ -64,14 +66,16 @@ Cool, got it, why should I care? Well, it brings us a couple of benefits:
 
 This makes your code insanely scalable, **you should write code like that always**.
 
-## ⛓️ Python does not have interfaces
+(Honestly, I can't imagine a high quality C#/Java code that does not respect this rule.)
+
+# ⛓️ Python does not have interfaces
 
 That's damn trick, how am I suppose to depend on abstractions if Python doesn't support interfaces?
 
 
 Well, there's the `ABC` module that would allow you to write a abstract class **disguised** as an interface. But honestly, I don't believe Python need interfaces.
 
-That's somewhat shocking, after researching a lot on StackOverflow an other posts, I came up to a conclusion:
+That's somewhat shocking, after researching a lot on StackOverflow and other posts, I came up to a conclusion:
 
 ### Interface is a solution for languages that does not support multiple-inheritance.
 
@@ -81,11 +85,17 @@ And guess what? Python supports it (I won't talk about the diamond problem cause
 
 [_From Wikipedia._](https://en.wikipedia.org/wiki/Multiple_inheritance)
 
+
+> **NOTE: Abstract classes**
+>
+> An Abstract Class is a way of sharing behaviors and implementations between its subclasses and **also** enforcing some contract between subclasses. You should use it if required, **my advice is not against abstract classes, but "_pure_" disguised abstract classes as interfaces**.
+
+
 Ok, but **how can I enforce a contract, then?** How can I guarantee that my implementation has all required methods and details?
 
 Well, that brings us to the next topic, which is:
 
-## 🦆 Python is dynamically typed
+# 🦆 Python is dynamically typed
 
 Man, have you realized that you need to specify types in some languages, but not in python? ([type hinting](https://docs.python.org/3/library/typing.html) does not enforce it btw).
 
@@ -105,8 +115,22 @@ sum_join(1, 1)     # produces 2
 sum_join("a", "b") # produces "ab"
 ```
 
-Such thing is called **duck typing**, a concept that says that: if it quacks like a duck then it must be a duck.
+Such thing is called **duck typing**, a concept that says: _if it quacks like a duck then it must be a duck_.
 
-### NOTE: Abstract classes
+In other words, your code assumes that having the methods/functions that you need means your implementation is fine.
 
-Abstract Class is a way of sharing behaviors and implementations between its subclasses and **also** enforcing some contract between subclasses. You should use it if required, **my advice is not against abstract classes, but "_pure_" disguised abstract classes as interfaces**.
+That's very powerful. But with great powers comes great responsibility. So I'll repeat the question:
+
+**How can I enforce a contract?** How can I rest assured that my code has implemented everything needed, and for God Sake it's taking args and returning correctly?
+
+Well, you can't. At least, not with regular abstract classes.
+
+How to solve that problem then? Well, I would ask you, regardless of how you enforce things, how would you prove me that your code implementation is correct and works for real?
+
+# 🧪 Unit Testing is the key
+
+The same way you SHOULD test that a function returns the expected result, you should test that your implementation works fine in your code.
+
+And that's it, you don't need an interpreter to force you to do stuff, you're grown up, you can ensure you did it yourself.
+
+Let me try to prove my point, because talk is cheap.
