@@ -86,3 +86,27 @@ Ok, but **how can I enforce a contract, then?** How can I guarantee that my impl
 Well, that brings us to the next topic, which is:
 
 ## 🦆 Python is dynamically typed
+
+Man, have you realized that you need to specify types in some languages, but not in python? ([type hinting](https://docs.python.org/3/library/typing.html) does not enforce it btw).
+
+Look at the following python function:
+
+```python
+def sum_join(v1, v2):
+    return v1 + v2
+```
+
+This function does not care about what passes, it will return the "sum" of 2 arguments.
+
+This means that you can use it like:
+
+```python
+sum_join(1, 1)     # produces 2
+sum_join("a", "b") # produces "ab"
+```
+
+Such thing is called **duck typing**, a concept that says that: if it quacks like a duck then it must be a duck.
+
+### NOTE: Abstract classes
+
+Abstract Class is a way of sharing behaviors and implementations between its subclasses and **also** enforcing some contract between subclasses. You should use it if required, **my advice is not against abstract classes, but "_pure_" disguised abstract classes as interfaces**.
