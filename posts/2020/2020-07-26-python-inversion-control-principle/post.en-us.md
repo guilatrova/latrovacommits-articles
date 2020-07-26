@@ -25,18 +25,21 @@ Let me make it simple, inversion of control states that your code should respect
 In other words, you can achieve that in C# with something like:
 
 ```csharp
-public interface IDependency {
+public interface IDependency
+{
     void work();
 }
 
-public class Implementation : IDependency {
+public class Implementation : IDependency
+{
     public void work()
     {
         Console.WriteLine("Implementation of Work!");
     }
 }
 
-public class Module() {
+public class Module
+{
     private IDependency dependency;
 
     public Module(dependency: IDependency)
