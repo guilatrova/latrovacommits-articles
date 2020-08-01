@@ -134,3 +134,125 @@ The same way you SHOULD test that a function returns the expected result, you sh
 And that's it, you don't need an interpreter to force you to do stuff, you're grown up, you can ensure you did it yourself.
 
 Let me try to prove my point, because talk is cheap.
+
+Let's consider we have a CronJob that runs every hour and we want to be notified _somehow_ whenever it gets executed.
+
+```python
+class CronJob:
+    def __init__(self, notificator):
+        self.notificator = notificator
+
+    def execute(self):
+        print("Executing cron job")
+        notification_emitted = self.notificator.send("Job has been executed")
+        if not notification_emitted:
+            raise Exception("Notification failed")
+```
+
+Note that we're receiving a "notificator" and it should contain a `send` method - and that's it.
+
+On C# you would implement it as:
+
+```csharp
+public interface INotificator
+{
+    bool send(String message);
+}
+
+public class WhatsAppNotification : INotificator
+{
+    public bool send(String message)
+    {
+        Console.WriteLine("Sending notification through Whatsapp")
+        return true;
+    }
+}
+```
+
+Let's imagine we have 3 implementations with 1 not respecting our `send` method.
+
+```python
+class WhatsAppNotification:
+    def send(self, msg):
+        print("Sending notification through Whatsapp")
+        return True
+
+
+class EmailNotification:
+    def send(self, msg):
+        print("Sending notification through Email")
+        return True
+
+
+class TelegramNotification:
+    def notificate(self, msg):
+        print("Not respecting contract")
+```
+
+How can we ensure we're not sending this broken `TelegramNotification` into production and ruining the whole thing?
+
+We can have these unit tests to ensure everything works:
+
+```python
+from unittest.mock import patch
+import pytest
+import notifications
+from jobs import CronJob
+
+
+class TestValidContract:
+    """Test job dependency with different implementations
+    """
+    def test_job_notificates_through_whatsapp(self):
+        job = CronJob(notifications.WhatsAppNotification())
+        job.execute()
+
+    def test_job_notificates_through_email(self):
+        job = CronJob(notifications.EmailNotification())
+        job.execute()
+
+    def test_job_throws_exception_when_notification_fails(self):
+        """Mocks notificator to return False
+        """
+        notificator = notifications.WhatsAppNotification()
+        with patch.object(notificator, "send", return_value=False):
+            with pytest.raises(Exception):
+                job = CronJob(notificator)
+                job.execute()
+
+
+class TestBrokenContract:
+    """Suite of tests that prove Telegram is not respecting
+    its contract.
+    """
+
+    def test_telegram_throws_exception_when_notification_fails(self):
+        """Mocking notificator does not fix a broken
+        contract
+        """
+        notificator = notifications.TelegramNotification()
+        with patch.object(notificator, "send", return_value=False):
+            with pytest.raises(Exception):
+                job = CronJob(notificator)
+                job.execute()
+
+    def test_job_notificates_through_telegram(self):
+        """This test will fail because
+        Telegram implementation does not respect contract
+        """
+        job = CronJob(notifications.TelegramNotification())
+        job.execute()
+```
+
+I decided to split the working suite from the failing one to make it easier to spot.
+
+Note what's really interesting
+
+- Mocking does not "fix" a broken contract
+- No interfaces has been written, we still proved that the implementation works
+
+But hey, don't trust me, please go straight to the repository, clone it execute and see it by yourself on
+**[GitHub](https://github.com/guilatrova/python-ensure-contract)**
+
+I'm adding to the source code a scenario where I believe it would be fine to implement abstract classes as well.
+
