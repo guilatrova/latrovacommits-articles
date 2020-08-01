@@ -277,4 +277,65 @@ So, based on our examples, that's how we can see it:
 
 `notificator` (the argument inside `CronJob`), is an abstraction and `WhatsAppNotification` is the actual implementation.
 
-But please note, `CronJob` receives an implementation through the abstraction.
+But please note, `CronJob` receives an implementation through the abstraction, that's why we're respecting the principle.
+
+## Examples
+
+**Abstract classes**
+
+I have absolutely nothing against abstract classes, I use them quite often by the way. I'm just opposed to writing more lines of code that don't add value. If you're writing unit tests (I really hope you are) why to enforce the same thing twice?
+
+If you have an actual behavior that you want to share, then it starts making sense to me. You need to ensure a base class has something to share, without deciding details of the implementation.
+
+(See this example for a valid reason on using abstract classes: [GitHub](https://github.com/guilatrova/python-ensure-contract/tree/master/abstract)).
+
+**Dependency Injection on classes**
+
+As the example showed above, it does respect the principle:
+
+```python
+class CronJob:
+    def __init__(self, notificator):
+        self.notificator = notificator
+```
+
+By allowing our `CronJob` to receive anything that's perfectly ok.
+You might also provide a default, so you can do it like:
+
+```python
+class CronJob:
+    def __init__(self, notificator=None):
+        self.notificator = notificator or WhatsAppNotification()
+```
+
+If you allow your code to take ANY implementation, then IMHO it still respects this principle.
+
+**Dependency Injection on modules**
+
+Different from other languages python has "modules" that can contain several functions.
+
+In such scenario there's no constructor to inject the implementation.
+
+So I often end up doing:
+
+```python
+notificator = WhatsAppNotification()
+
+def execute_job():
+    notificator.send("Job executed")
+```
+
+See? `notificator` is now a module dependency, and it can be anything thanks to Duck Typing. We need to implement unit tests to ensure that our notificator respects the `send` contract.
+
+**KISP: Keep It Simple, Pythonista - no IoC Containers**
+
+Again, if you come from other languages, you probably are familiar with a few IoC Containers.
+
+I can't see a good reason to implement them in Python. Your code gets verbose, new developers don't really understand what's happening behind your code (honestly neither do I lol).
+
+Why to add more lines to your code if you can achieve:
+
+- Loosely coupled code
+- Highly testable code
+
+without an IoC framework?
