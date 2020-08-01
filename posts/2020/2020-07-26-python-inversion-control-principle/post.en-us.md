@@ -163,7 +163,7 @@ public class WhatsAppNotification : INotificator
 {
     public bool send(String message)
     {
-        Console.WriteLine("Sending notification through Whatsapp")
+        Console.WriteLine("Sending notification through Whatsapp");
         return true;
     }
 }
@@ -256,3 +256,25 @@ But hey, don't trust me, please go straight to the repository, clone it execute 
 
 I'm adding to the source code a scenario where I believe it would be fine to implement abstract classes as well.
 
+# 🐍 Can we implement it on Python?
+
+**Yes!** but that may depend on how you see things though.
+
+Again, Inversion of Control Principle states that:
+
+- Modules must depends on absctrations;
+- Implementations must depends on abstractions;
+
+and that's how I honestly see it now:
+
+![DIP languages](dip-languages.png)
+
+**A python dynamic type that can be anything is the abstraction.**
+
+So, based on our examples, that's how we can see it:
+
+![DIP example](dip-example.png)
+
+`notificator` (the argument inside `CronJob`), is an abstraction and `WhatsAppNotification` is the actual implementation.
+
+But please note, `CronJob` receives an implementation through the abstraction.
