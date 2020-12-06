@@ -73,7 +73,7 @@ This makes your code insanely scalable, **you should write code like that always
 That's damn trick, how am I suppose to depend on abstractions if Python doesn't support interfaces?
 
 
-Well, there's the `ABC` module that would allow you to write a abstract class **disguised** as an interface. But honestly, I don't believe Python need interfaces.
+Well, there's the `ABC` module that would allow you to write an abstract class **disguised** as an interface. But honestly, I don't believe Python need interfaces.
 
 That's somewhat shocking, after researching a lot on StackOverflow and other posts, I came up to a conclusion:
 
@@ -123,7 +123,7 @@ That's very powerful. But with great powers comes great responsibility. So I'll 
 
 **How can I enforce a contract?** How can I rest assured that my code has implemented everything needed, and for God Sake it's taking args and returning correctly?
 
-Well, you can't. At least, not with regular abstract classes.
+Well, you can't. At least, not with regular classes.
 
 How to solve that problem then? Well, I would ask you, regardless of how you enforce things, how would you prove me that your code implementation is correct and works for real?
 
@@ -169,7 +169,7 @@ public class WhatsAppNotification : INotificator
 }
 ```
 
-Let's imagine we have 3 implementations with 1 not respecting our `send` method.
+Now in python, let's imagine we have 3 implementations with 1 not respecting our `send` method.
 
 ```python
 class WhatsAppNotification:
@@ -249,7 +249,7 @@ I decided to split the working suite from the failing one to make it easier to s
 Note what's really interesting
 
 - Mocking does not "fix" a broken contract
-- No interfaces has been written, we still proved that the implementation works
+- No interfaces have been written, we still proved that the implementation works
 
 But hey, don't trust me, please go straight to the repository, clone it execute and see it by yourself on
 **[GitHub](https://github.com/guilatrova/python-ensure-contract)**
@@ -262,7 +262,7 @@ I'm adding to the source code a scenario where I believe it would be fine to imp
 
 Again, Inversion of Control Principle states that:
 
-- Modules must depends on absctrations;
+- Modules must depends on abstractions;
 - Implementations must depends on abstractions;
 
 and that's how I honestly see it now:
