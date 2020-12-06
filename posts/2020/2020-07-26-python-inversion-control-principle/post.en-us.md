@@ -1,6 +1,15 @@
 # Thoughts on Python Dependency Injection
 
-// TODO: Make clear difference between IOC, DI and IOC framework
+### Glossary Cheat Sheet
+
+Before we dive into it, let's review some acronyms and what they represent:
+
+- **DIP** `(Dependency Inversion Principle)` is a principle.
+- **IOC** `(Inversion Of Control)` is a principle.
+- **DI** `(Dependency Injection)` is a pattern.
+- **IOC Container** is a framework.
+
+## Introduction
 
 The first thing that I thought that was missing when I came from a C# background to Python was:
 
@@ -15,7 +24,7 @@ And looks like that's a pretty common question from anyone coming from a typed l
 
 Please, note how all these questions always mentions: _"Well, in Java/C#/other language..."_. Let me interrupt it right there because, **well, you're not in Java, C# or anything else**, so how should you face this problem?
 
-# 🤔 What's Inversion of Control and why should I care about?
+# 🤔 What's Dependency Inversion Principle and why should I care about?
 
 Let me make it simple, inversion of control states that your code should respect two rules:
 
