@@ -348,3 +348,19 @@ Why to add more lines to your code if you can achieve:
 - Highly testable code
 
 without an IoC framework?
+
+
+# Conclusion
+
+Let's wrap it up:
+
+- Respect and honor DIP to achieve high quality decoupled code;
+- Python does not have interfaces, you should write unit tests to ensure contracts are respected;
+- Abstract classes are welcome when you want to share some behavior;
+- You don't need IoC containers;
+
+Do you disagree? Please **reply and point out my weak spots**, so we can learn more together 😃. Example code is encouraged and can enrich the experience.
+
+### References
+
+TBD
