@@ -350,7 +350,7 @@ Why to add more lines to your code if you can achieve:
 without an IoC framework?
 
 
-# Conclusion
+# ⭐ Conclusion
 
 Let's wrap it up:
 
@@ -361,6 +361,13 @@ Let's wrap it up:
 
 Do you disagree? Please **reply and point out my weak spots**, so we can learn more together 😃. Example code is encouraged and can enrich the experience.
 
-### References
+### 🔖 References
 
-TBD
+I relied on a few links to write this article:
+
+- [SOLID Python: SOLID principles applied to a dynamic programming language](https://www.researchgate.net/publication/323935872_SOLID_Python_SOLID_principles_applied_to_a_dynamic_programming_language)
+- [Stack Overflow: What is duck typing?](https://stackoverflow.com/questions/4205130/what-is-duck-typing)
+- [IoC Introduction](https://www.tutorialsteacher.com/ioc/introduction)
+- [IoC Techniques](https://seddonym.me/2019/08/03/ioc-techniques/)
+- [Three Techniques for Inverting Control, in Python](https://seddonym.me/2019/08/03/ioc-techniques/)
+
