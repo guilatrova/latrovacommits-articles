@@ -61,14 +61,14 @@ Instead, make questions and talk about issues. If you realize something broke in
 
 Remember, your team should be able to understand and solve everything in your absense. You shouldn't know more than your team.
 
-### Show you're open to ideas, make your team comfortable telling you're wrong
-> Everybody loves meritocracy, but just a few enjoy knowing they're wrong
+### 🧠 8. Show you're open to ideas, make your team comfortable telling you're wrong
+> Everybody loves idea meritocracy, but just a few enjoy knowing they're wrong
 
-When I got my first shot to refactor a whole micro service in a month I got overconfident. I thought I would be able to deliver the whole system in a week. Poor me, it was shocking to hear from my team that my goals was way off and it would be impossible to deliver in time.
+When I got my first shot to refactor a whole micro service in a month I got overconfident. I thought I would be able to deliver the whole system in a week. Ha poor me. It was shocking to hear from my team that my goals were way off and it would be impossible to deliver in time.
 
-It took a while for them to realize they could tell me, as soon as I heard that my posture changed. We together outlined every risk and I came up with a plan the next day - it was a map with all features we could push to deliver and the ones that would be ok if we didn't deliver by deadline.
+It took a while for them to realize they could tell me and as soon as they had the courage to tell and I heard it my posture changed: We together outlined every risk and I came up with a plan the next day, it was a map with all features we could push to deliver and the ones that would be ok if we delivered later.
 
-We were able to focus and my whole team got motivated because they believed in the plan we built together. If you have your team trust, you guys can make miracles. After that episode it became an habit to tell when we disagreed about anything, and I must assume I was wrong several times and we always could recognize it before it were too late.
+We were able to focus and my whole team got motivated because they believed in the plan we built together. **If you have your team trust, you guys can make miracles**. After that episode it became an habit to tell when we disagreed about anything, and I must assume **I was wrong several times and we always could recognize it before it were too late**.
 
 ### Do a favor for your team and criticize them!
 > Work with people that enjoy criticism, if they don't make them used to it!
