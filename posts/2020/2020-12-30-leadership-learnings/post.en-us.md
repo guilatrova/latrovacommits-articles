@@ -6,14 +6,14 @@ It was the biggest challenge I ever took: I never tried it before, I was deeply 
 
 As I progressed leading 2 teams, I collected several "*rules*" or as I prefer: **principles** that worked out for me on handling some situations. I'm going to share them right now, so hopefully you can skip some pains and absorb some learnings from my experiences.
 
-### 1. Never open the meeting talking, Ask first
+### 💬 1. Never open the meeting talking, Ask first
 > We don't know everything, it's impossible to. Ask your team! Ask for updates, problems and risks.
 
 I remember on my first day it was very frustrating to be in the front of a project without knowing anything. I felt that if I didn't come up with a clear plan/solution (yes, in my first day) I would fail. Turns out that leading is more about **relying on your team, than knowing everything**.
 
 It's completely fine to not know everything, instead: Ask your team!
 
-### 2. People are like babies
+### 👶 2. People are like babies
 > They feel what you transmit to them. You laugh, them laugh. You cry, them cry - They don't even know why.
 
 My first week was terrible, I was nervous, I was anxious, You could see clearly through me that **I was panicking!** As I asked questions and talked about next steps with my team, they responded in the same way: worried, nervous, feeling sad. Clearly I made them feel that way! You can unmotivate your team because of your own internal feelings.
@@ -22,7 +22,7 @@ I remember months later after I absorved the technique of being **positive and o
 
 Guess what? Yes, we got it. 30 minutes was risky but enough. If I had yelled at them complaining about some lack of responsibility or any other bullshit do you think the result would be different? Probably not better. Always, under any cincurstance: Be tough, but also **positive and optimisc**. Always believe your team will handle it, what you don't know you will find out and somehow things will work out.
 
-### 3. Don't get involved with details
+### 🖼️ 3. Don't get involved with details
 > Have the big picture in mind. Always keep your discussion in the intended level, don't get lost.
 
 That's a hard one. Coming from a developer world I was eager to understand every damn line of code, every minimal decision regarding tools and frameworks and I felt that if I didn't I would be failing as a leader. In the end of the day, these stuff doesn't even matter. You should just ensure the right projects are progressing and that it solves the problem.
@@ -31,7 +31,7 @@ It's tempting to start discussing about how many classes/functions would be impl
 
 (Worth mentioning this principle it's easier said than done, I often need to remind myself to focus on the big picture).
 
-### Never interrupt people, they need to feel they're heard
+### 👂 Never interrupt people, they need to feel they're heard
 > If you need to change the topic, ask questions instead or reschedule a better time in order to make it happen
 
 As the team grows it's very easy for people to start adding details that don't add any value to the discussion, or talk about something else related to the main topic that is getting them anxious.
