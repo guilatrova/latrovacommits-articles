@@ -38,12 +38,12 @@ As the team grows it's very easy for people to start adding details that don't a
 
 Well, **interrupting them is the worst thing you could ever do**. It just makes them feel even more anxious, but now ignored as a bonus. If for any reason people are getting off track start asking questions: *Do we really need to handle this right now?*, *Do you think that topic X deserves to be decided before Y?* and always **be open**. Remember: **You don't know everything**, if it's something important, you can always schedule a proper call to address it specifically without losing the meeting goal.
 
-### Don't act like willing people to obey right now just because you want it
+### 🕹️ 5. Don't act like willing people to obey right now just because you want it
 > Hear their ideas, make them suggest! No one likes to be controlled, they want to feel they're free
 
-As a new leader, I was always anxious to ensure my team would be able to delivery everything under time. It's easy to start giving orders and directions willing them to do exactly what you want right now. Don't be like that. People are not machines, you can't give run a function and expect them to give the expected output.
+As a new leader, I was always anxious to ensure my team would be able to delivery everything under time. It's easy to start giving orders and directions willing them to do exactly what you want right now. Don't be like that. **People are not machines, you can't run a function and expect them to give the expected output**.
 
-Hold your anxities, ensure they understand the problem and ask them for ideas. Again, maybe their ideas are better than yours. Who knows?
+Hold your anxities, ensure they understand the problem and ask them for ideas. Again, **maybe their ideas are better than yours**. Who knows?
 
 ### Make sure everyone knows what they should do and what's the deadline
 > I noticed my CTO doing it over and over again and ensuring everyone understood his goals
