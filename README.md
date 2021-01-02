@@ -8,6 +8,8 @@ I was tired of copying/pasting my posts between my blogs, creatings gists, uploa
 
 That's why I'm keeping my posts stored public in GitHub. I want to track them (with git), and use CircleCI to manage and publish them for me.
 
+![workflow example](./img/circleci-medium-example.gif)
+
 ## Automation checklist
 
 - [x] Medium
