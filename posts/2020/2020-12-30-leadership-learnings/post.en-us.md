@@ -16,7 +16,7 @@ It's completely fine to not know everything, instead: Ask your team!
 ### 👶 2. People are like babies
 > They feel what you transmit to them. You laugh, they laugh. You cry, they cry - They don't even know why.
 
-The first week was terrible, I was nervous, I was anxious, you could see clearly through me that **I was panicking!**. As I asked questions and talked about the next steps with my team, they responded in the same way: worried, nervous, feeling sad. Clearly, I made them feel that way! You can unmotivate your team because of your own internal feelings.
+The first week was terrible, I was nervous, I was anxious, you could see clearly through me that **I was panicking!**. As I asked questions and talked about the next steps with my team, they responded in the same way: worried, nervous, feeling sad. Clearly I made them feel that way! You can unmotivate your whole team because of your own internal feelings.
 
 I remember months later after I absorbed the technique of being **positive and optimistic**. We were trying to replace our old KDS software for the new version my team worked so hard to develop, the only issue was that we had 2 hours to test and the third party team responsible for the integration didn't finish their part. My whole team got stuck in the meeting for 1 hour and a half while waiting for the other team. Can you imagine how frustrating it is to run things in production that can affect our operation just a few minutes before the opening hours? But there was nothing on my plate that I could do to solve, the real best I could do was to encourage the team to finish and believing they would be able to finish it in time for our test and before the kitchen opening hours.
 
