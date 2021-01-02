@@ -45,10 +45,12 @@ As a new leader, I was always anxious to ensure my team would be able to deliver
 
 Hold your anxities, ensure they understand the problem and ask them for ideas. Again, **maybe their ideas are better than yours**. Who knows?
 
-### Make sure everyone knows what they should do and what's the deadline
-> I noticed my CTO doing it over and over again and ensuring everyone understood his goals
+### 🧾 6. Make sure everyone knows what they should do and what's the deadline
+> Ensure your team is on the same page you are
 
-As a long meeting ends it's very easy to forget part of the discussion and get off track, you can't guarantee everybody paid attention, but you always can ensure they at least know the next steps. After every meeting with required action is over, write a message (through slack, email, etc) to everybody involved. Outline the next steps discussed and tag people to these steps. Even who got lost in the meeting can easily catch up and understand what they missed.
+I learned this straight from watching my CTO doing it over and over again and ensuring everyone understood his goals and next steps.
+
+As soon as a long meeting ends it's very easy to forget part of the discussion and feel lost, **you can't guarantee everybody paid attention, but you can ensure they know the next steps**. After every meeting with required action is over, write a message (through slack, email, whatever) to everybody involved. Outline the next steps discussed and tag people to these steps. Even who got lost in the meeting can easily catch up and understand what they missed.
 
 ### Don't tell, train
 > Your team should be able to conduct every process in your absense
