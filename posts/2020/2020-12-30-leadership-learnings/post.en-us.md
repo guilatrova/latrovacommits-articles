@@ -89,5 +89,18 @@ If I deeply want to improve through honest feedback, why my team would want anyt
 
 # In the end, did it pay off?
 
+I still remember 2020 March: Me seated in my Kitchen table crying with my wife telling her **it was the worst idea I ever had**. I was doing terrible and got bad results so far. It was just a matter of time to get fired, **I've lost all faith that I could ever become a leader**.
 
-I still remember telling my wife that it probably was the worst decision I ever made. Leaving a good company to venture myself doing something totally different? Turns out that although I initially failed, my CTO allowed me to **recognize all my mistakes and grow** which made me succeed as a leader in the following months and delivering 3 projects with a team of 3 developers and then 1 developer.
+What I was thinking? Leaving a good company to venture myself doing something totally different? And for what? For boredom?
+
+Turns out although I initially failed, **I was able to learn and grow fast**. All my previous mistakes got so clear to me, every bad decision seemed easy to solve and as a result of that I started delivering everything in time and got promoted to repeat the recipe with a whole new team.
+
+Yes, instead of getting fired I improved and got promoted. Sometimes fear is the best urge to be humble and grow.
+
+The incredible pain of failing made me learn tons of things by experience (which worths more than books and articles on leadership because you live and feel every decision consequence).
+
+It made me understand that (sometimes) **boredom is the signal you're done with learning in the current position you are. It means you desire some good fight.** Thus you should follow that urge.
+
+Worth saying that without my wife and God to support me emotionally and without my CTO to support me at my work - I would have failed for good. Be surrounded by people who support your growth and by who wants you to strive for growth.
+
+So **I don't regret it at all**. I chose the best place to start and to fail because my CTO allowed me to **try, learn and recognize all my mistakes** which made me succeed as a leader in the following months and delivering 3 projects with 2 teams of around three developers each. **Always work with people you respect and that are better than you**
