@@ -31,12 +31,12 @@ It's tempting to start discussing about how many classes/functions would be impl
 
 (Worth mentioning this principle it's easier said than done, I often need to remind myself to focus on the big picture).
 
-### 👂 Never interrupt people, they need to feel they're heard
+### 👂 4. Never interrupt people, they need to feel they're heard
 > If you need to change the topic, ask questions instead or reschedule a better time in order to make it happen
 
 As the team grows it's very easy for people to start adding details that don't add any value to the discussion, or talk about something else related to the main topic that is getting them anxious.
 
-Well, interrupting them is terrible. It just makes them feel even more anxious, but this time ignored as a bonus. If for any reason people are getting off track start asking questions: *Do we really need to handle this right now?* *Do you think that topic X deserves to be decided before Y?*_ and always be open. Remember: **You don't know everything**, if is something important, you can always schedule a proper call to address it specifically without losing the meeting goal.
+Well, **interrupting them is the worst thing you could ever do**. It just makes them feel even more anxious, but now ignored as a bonus. If for any reason people are getting off track start asking questions: *Do we really need to handle this right now?*, *Do you think that topic X deserves to be decided before Y?* and always **be open**. Remember: **You don't know everything**, if it's something important, you can always schedule a proper call to address it specifically without losing the meeting goal.
 
 ### Don't act like willing people to obey right now just because you want it
 > Hear their ideas, make them suggest! No one likes to be controlled, they want to feel they're free
