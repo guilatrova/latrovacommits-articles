@@ -1,12 +1,10 @@
-# What I learned as a leader this year
+# What I learned as a leader in 2020
 
-This year was outstanding for me. Not just because of the pandemic, but also because I decided to take a leap in my career (more on this later). After coding for a long time I decided to try my luck as a Tech Lead at Mimic.
+This year was outstanding for me. Not just because of the pandemic, but also because even before that I decided to take a new challenge in my career (more on this later). After coding for quite some time I decided to try my luck as a Tech Lead at Mimic.
 
-At the beginning it was the biggest pain I ever had and the biggest fear I ever felt. I never tried it before, and being the first tech lead hired in a new startup wasn't helping either. I had to learn and I had to do it fast. Thankfully I had the opportunity to make all possible mistakes (yes, all of them!) and a mentor (Thank you David!) to guide and correct me as I failed across the path.
+It was the biggest challenge I ever took: I never tried it before, I was deeply scared, and being the first tech lead hired in a new startup wasn't helping either. **I had to learn and I had to do it fast.** Thankfully I had the opportunity to make all possible mistakes (yes, all of *them*!) and a mentor (Thank you David!) to guide and correct me as I failed across the path.
 
-I still remember telling my wife that it probably was the worst decision I ever made. Leaving a good company to venture myself doing something totally different? Turns out that although I initially failed, my CTO allowed me to **recognize all my mistakes and grow** which made me succeed as a leader in the following months and delivering 3 projects with a team of 3 developers and then 1 developer.
-
-As I progressed leading these teams, I collected several "rules" or as I prefer: principles that made me realize how to handle some situations. I would like to present and comment them briefly in case someone else finds it useful.
+As I progressed leading 2 teams, I collected several "*rules*" or as I prefer: **principles** that worked out for me on handling some situations. I'm going to share them right now, so hopefully you can skip some pains and absorb some learnings from my experiences.
 
 ### Never open the meeting talking, Ask first
 > We don't know everything, it's impossible to. Ask your team! Ask for updates, problems and risks.
@@ -59,13 +57,6 @@ Instead, make questions and talk about issues. If you realize something broke in
 
 Remember, your team should be able to understand and solve everything in your absense. You shouldn't know more than your team.
 
-### Make your team feeling it's ok by not knowing something
-> If you rush to criticize them by not knowing something, they will never show you their weak spots
-
-As a leader it's my job to ensure everybody in my team is growing and evolving - a really tough challenge. The best way to do that is by recognizing your team weak spots.
-
-If you make them feeling guilty by not knowing something, the odds of having them telling you they don't understand/know something will decrease continually! If your team don't trust you enough to tell your they don't know something, your odds of succeeding as a leader decreased as well.
-
 ### Show you're open to ideas, make your team comfortable telling you're wrong
 > Everybody loves meritocracy, but just a few enjoy knowing they're wrong
 
@@ -86,8 +77,8 @@ I remember the first weeks of my job the thing that I most desired was feedback,
 
 No, if you have something to say, you don't have to be right, you just have to be honest.
 
-### Don't complain, ask and execute!
-> Talk is cheap, show me the code
-
 
 # In the end, did it pay off?
+
+
+I still remember telling my wife that it probably was the worst decision I ever made. Leaving a good company to venture myself doing something totally different? Turns out that although I initially failed, my CTO allowed me to **recognize all my mistakes and grow** which made me succeed as a leader in the following months and delivering 3 projects with a team of 3 developers and then 1 developer.
