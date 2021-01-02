@@ -75,14 +75,17 @@ We were able to focus and my whole team got motivated because they believed in t
 ### 🤯 9. Do a favor for your team and criticize them!
 > Work with people that enjoy criticism, if they don't make them used to it!
 
-I must say that Dale Carnegie got a point when he says to "do not ever criticize" someone. I got him. This is not true when you're building a team that **wishes to grow**. It's impossible to grow without pain. Why it would be different in your profession?
+Dale Carnegie got a point when he says to "do not ever criticize" someone. I got him, but this is not true when **you're building a team that wishes to grow**. It's impossible to grow without pain in any area. Why it would be different in your profession?
 
-As soon as I started, I made the stupid mistake of never critizing directly a team member. It took me a while to understand that I was actually **stealing them the opportunity of growing at the same time I was hiding myself from conflicts**.
+As soon as I started leading, I made the stupid mistake of never critizing directly a team member which I regret today.
 
-I remember the first weeks of my job the thing that I most desired was feedback, constant and tough feedback. Not cheap praise, but a feedback that hurts you deeply but that you know it's true. **I prefer to hear a hard truth that will make me grow than to hear a pretty lie that will keep me comfortable**. If I deeply want that and if I wish to hear hard truths from my team, how can I pay it back? By lying to them?
+It took me a while to understand that I was actually **stealing them the opportunity of growing at the same time I was hiding myself from conflicts**.
 
-No, if you have something to say, you don't have to be right, you just have to be honest.
+I remember in the first months of my job the thing I mostly desired was feedback: constant and **tough feedback** - not cheap praise. I'm passionate about these feedbacks that hurt you deeply but that you know it's true. **I prefer to hear a hard truth that will make me grow than to hear a pretty lie that will keep me comfortable**.
 
+If I deeply want to improve through honest feedback, why my team would want anything different? If they do it to me, how I will pay them back? By just saying nice things?
+
+**NO! If you have something to say, SAY IT. You don't have to be right, you just have to be honest.**
 
 # In the end, did it pay off?
 
