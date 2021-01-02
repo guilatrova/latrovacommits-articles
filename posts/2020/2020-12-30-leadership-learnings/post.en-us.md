@@ -64,13 +64,15 @@ Remember, your team should be able to understand and solve everything in your ab
 ### 🧠 8. Show you're open to ideas, make your team comfortable telling you're wrong
 > Everybody loves idea meritocracy, but just a few enjoy knowing they're wrong
 
+This is analogous to Ray Dalio's principle: "Be radically open minded".
+
 When I got my first shot to refactor a whole micro service in a month I got overconfident. I thought I would be able to deliver the whole system in a week. Ha poor me. It was shocking to hear from my team that my goals were way off and it would be impossible to deliver in time.
 
 It took a while for them to realize they could tell me and as soon as they had the courage to tell and I heard it my posture changed: We together outlined every risk and I came up with a plan the next day, it was a map with all features we could push to deliver and the ones that would be ok if we delivered later.
 
 We were able to focus and my whole team got motivated because they believed in the plan we built together. **If you have your team trust, you guys can make miracles**. After that episode it became an habit to tell when we disagreed about anything, and I must assume **I was wrong several times and we always could recognize it before it were too late**.
 
-### Do a favor for your team and criticize them!
+### 🤯 9. Do a favor for your team and criticize them!
 > Work with people that enjoy criticism, if they don't make them used to it!
 
 I must say that Dale Carnegie got a point when he says to "do not ever criticize" someone. I got him. This is not true when you're building a team that **wishes to grow**. It's impossible to grow without pain. Why it would be different in your profession?
