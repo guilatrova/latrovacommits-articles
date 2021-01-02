@@ -6,10 +6,12 @@ It was the biggest challenge I ever took: I never tried it before, I was deeply 
 
 As I progressed leading 2 teams, I collected several "*rules*" or as I prefer: **principles** that worked out for me on handling some situations. I'm going to share them right now, so hopefully you can skip some pains and absorb some learnings from my experiences.
 
-### Never open the meeting talking, Ask first
+### 1. Never open the meeting talking, Ask first
 > We don't know everything, it's impossible to. Ask your team! Ask for updates, problems and risks.
 
 I remember on my first day it was very frustrating to be in the front of a project without knowing anything. I felt that if I didn't come up with a clear plan/solution (yes, in my first day) I would fail. Turns out that leading is more about **relying on your team, than knowing everything**.
+
+It's completely fine to not know everything, instead: Ask your team!
 
 ### People are like babies
 > People are just like babies. They feel what you transmit to them. You laugh them laugh, you cry them cry. They don't even know why.
