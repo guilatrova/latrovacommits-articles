@@ -13,25 +13,25 @@ I remember on my first day it was very frustrating to be in the front of a proje
 
 It's completely fine to not know everything, instead: Ask your team!
 
-### People are like babies
-> People are just like babies. They feel what you transmit to them. You laugh them laugh, you cry them cry. They don't even know why.
+### 2. People are like babies
+> They feel what you transmit to them. You laugh, them laugh. You cry, them cry - They don't even know why.
 
-My first week was terrible, I was nervous, I was anxious - _am I doing well as a leader? Am I missing anything?_ I thought every moment. You could see clearly through me: **I was panicking!** As I asked questions and talked about next steps with my team, they responded in the same way: worried, nervous, feeling sad. Clearly, that's a terrible thing to do! You unmotivate your team because your own internal feelings.
+My first week was terrible, I was nervous, I was anxious, You could see clearly through me that **I was panicking!** As I asked questions and talked about next steps with my team, they responded in the same way: worried, nervous, feeling sad. Clearly I made them feel that way! You can unmotivate your team because of your own internal feelings.
 
-I remember months later after I absorved the technique of being **positive and optimisc** meanwhile we were trying to replace our old KDS software for the new one my team was developing, the only issue is that we had 2 hours to test and the third party team responsible for the integration didn't finish their part. My whole team got stuck in the meeting for 1 hour and half while waiting the other team finish their setup. Can you imagine how frustrating it is to run things in production that can affect your kitchen just before the opening hours? ... A lot! But there was nothing on my plate that I could do to solve, the real best I could do is to encourage the team to finish and believing they would be able to finish it in time for our test and before the kitchen opening hours.
+I remember months later after I absorved the technique of being **positive and optimisc** meanwhile we were trying to replace our old KDS software for the new version my team was developing, the only issue is that we had 2 hours to test and the third party team responsible for the integration didn't finish their part. My whole team got stuck in the meeting for 1 hour and half while waiting for the other team. Can you imagine how frustrating it is to run things in production that can affect our operation just a few minutes before the opening hours? But there was nothing on my plate that I could do to solve, the real best I could do is to encourage the team to finish and believing they would be able to finish it in time for our test and before the kitchen opening hours.
 
-Guess what? Yes, we got it. 30 minutes was risky but enough. If I had yelled at them complaining about some lack of responsibility or any other bullshit. Do you think the result would be different? Probably not better. Always, under any cincurstance: Be tough, but also **positive and optimisc**. Your team will handle it, what you don't know you will find out and somehow things will work out.
+Guess what? Yes, we got it. 30 minutes was risky but enough. If I had yelled at them complaining about some lack of responsibility or any other bullshit do you think the result would be different? Probably not better. Always, under any cincurstance: Be tough, but also **positive and optimisc**. Always believe your team will handle it, what you don't know you will find out and somehow things will work out.
 
-### Don't get involved with details
+### 3. Don't get involved with details
 > Have the big picture in mind. Always keep your discussion in the intended level, don't get lost.
 
-That's a hard one. Coming from a development reality, I was eager to understand every damn line of code, every minimal decision regarding tools and frameworks and I felt that if I didn't - I would be failing as a leader. In the end of the day, these stuff doesn't matter. You should just ensure the right projects are progressing and that it solves the problem.
+That's a hard one. Coming from a developer world I was eager to understand every damn line of code, every minimal decision regarding tools and frameworks and I felt that if I didn't I would be failing as a leader. In the end of the day, these stuff doesn't even matter. You should just ensure the right projects are progressing and that it solves the problem.
 
-It's tempting to start discussing about how many classes/functions would be implemented to solve the problem. I wouldn't ever succeed as a leader if I've focused on the details. Instead, I relied and trained my team so I could trust that they can manage the details pretty well themselves.
+It's tempting to start discussing about how many classes/functions would be implemented to solve the problem. I wouldn't ever succeed as a leader if I've focused on the details. Instead I relied and trained my team so I could trust them to manage and handle such details.
 
-(Worth mentioning this principle it's easier said than done, I often need to come back at it to sharp my leadership skills).
+(Worth mentioning this principle it's easier said than done, I often need to remind myself to focus on the big picture).
 
-### Never interrupt people, they need to feel they're being listened
+### Never interrupt people, they need to feel they're heard
 > If you need to change the topic, ask questions instead or reschedule a better time in order to make it happen
 
 As the team grows it's very easy for people to start adding details that don't add any value to the discussion, or talk about something else related to the main topic that is getting them anxious.
