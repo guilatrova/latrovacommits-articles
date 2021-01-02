@@ -103,4 +103,4 @@ It made me understand that (sometimes) **boredom is the signal you're done with 
 
 Worth saying that without my wife and God to support me emotionally and without my CTO to support me at my work - I would have failed for good. Be surrounded by people who support your growth and by those who want you to strive for growth.
 
-So **I don't regret it at all**. I chose the best place to start and to fail because my CTO allowed me to **try, learn, and recognize all my mistakes** which made me succeed as a leader in the following months and delivering 3 projects with 2 teams of around three developers each. **Always work with people you respect and that are better than you**
+So **I don't regret it at all**. I chose the best place to start and to fail because my CTO allowed me to **try, learn, and recognize all my mistakes** which made me succeed as a leader in the following months and delivering 3 projects with 2 teams of around three developers each. **Always work with people you respect and that are better than you**.
