@@ -52,12 +52,12 @@ I learned this straight from watching my CTO doing it over and over again and en
 
 As soon as a long meeting ends it's very easy to forget part of the discussion and feel lost, **you can't guarantee everybody paid attention, but you can ensure they know the next steps**. After every meeting with required action is over, write a message (through slack, email, whatever) to everybody involved. Outline the next steps discussed and tag people to these steps. Even who got lost in the meeting can easily catch up and understand what they missed.
 
-### Don't tell, train
+### 🏋️ 7. Don't tell, train
 > Your team should be able to conduct every process in your absense
 
-It's very easy to just give orders and instructions. Change this variable, update that config, etc. If you keep doing it, you're not really sharing knowledge, you're just giving orders.
+It's very easy to just give orders and instructions: *Change this variable*, *update that config*, etc. If you keep doing it, **you're not really sharing knowledge, you're just giving orders**.
 
-Instead, make questions and talk about issues. If you realize something broke in production, instead of jumping in to fixing it yourself, ask someone: *Why did it break?*, *What you would do to solve that?* and finally ask them to show you. Yes, let them do it, there's no better way to learn.
+Instead, make questions and talk about issues. If you realize something broke in production, instead of jumping in to fixing it yourself, ask someone: *Why did it break?*, *How can we avoid this from happening again?*, *What would you do to solve that?* and finally ask them to handle that for you. **Yes, let them do it, there's no better way to learn.**
 
 Remember, your team should be able to understand and solve everything in your absense. You shouldn't know more than your team.
 
