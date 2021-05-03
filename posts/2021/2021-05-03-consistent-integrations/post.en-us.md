@@ -145,4 +145,4 @@ By breaking down our final model into small handlers we allow:
 
 We had an amazing experience by picking this design pattern to solve this particular issue.
 
-What do you think? Do you see any challenges that we could have done easier?
+What do you think? Do you see any challenges that we could have done easier? Get in touch! 🙂
