@@ -1,4 +1,4 @@
-# How we built an agnostic microservice platform for all integrations
+# Building an agnostic microservice architecture with Kafka
 
 At Mimic, we have the challenge of integrating with several third parties ([ifood](https://techcrunch.com/tag/ifood/), [Uber](https://techcrunch.com/tag/uber-eats/), [Rappi](https://techcrunch.com/tag/rappi/)) without exposing/leaking details to our main microservice. Each integration has its challenges as [I discussed briefly before](https://blog.guilatrova.dev/architectural-challenges-on-integrating-rappi/) in this blog, but in the end, all the details should be solved individually and finally somehow fit in our external interface.
 
