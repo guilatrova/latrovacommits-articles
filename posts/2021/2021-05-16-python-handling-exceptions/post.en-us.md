@@ -82,11 +82,11 @@ class OrderService:
         return {"order_id": order_id, "order_status": order_status.value}
 ```
 
-I'll focus first on `OrderService` excessive knowledge which makes him a [Blob](https://sourcemaking.com/antipatterns/the-blob) and later on I will explore proper reraising + proper exception logging.
+I'll focus first on `OrderService` excessive knowledge which makes him somewhat a [Blob](https://sourcemaking.com/antipatterns/the-blob) and later on I will explore proper reraising + proper exception logging.
 
-### Why is this service is a blob
+### Why is this service a blob
 
-This service knows too much. Some people may argue that this service only knows about what he should know (i.e. all steps related to receipt generation), but it know way more than that.
+This service knows too much. Some people may argue that this service only knows about what it should know (i.e. all steps related to receipt generation), but it knows way more than that.
 
 It focuses on producing errors (e.g. database, printing, order status) instead of what it does (e.g. retrieve, check status, generate, send) and how to respond in case of failures.
 
@@ -94,6 +94,38 @@ In that sense, it makes me feel that the client is teaching the serving class wh
 
 Although this service works fine, it's hard to maintain, and it's not clear how one step correlates to the other due the repeated `except` blocks between every step which take away our attention on the "how" to think about "when".
 
+### First improvement: Make exceptions specific
+
+Let's make the exceptions more accurate and specific first.
+The benefits can't be seen right away, so I'll not spend too much time explaining it right now. But please, pay attention as the code evolves.
+
+I will only highlight what we modified:
+
+```py
+try:
+    order_status = status_service.get_order_status(order_id)
+except Exception as e:
+    logger.exception(...)
+    raise OrderNotFound(order_id) from e
+
+...
+
+try:
+    ...
+except Exception as e:
+    logger.exception(...)
+    raise ReceiptGenerationFailed(order_id) from e
+
+try:
+    broker.emit_receipt_note(receipt_note)
+except Exception as e:
+    logger.exception(...)
+    raise ReceiptEmissionFailed(order_id) from e
+```
+
+Note that this time I'm also benefiting of using `from e` which is the correct way of raising an exception from another and keeps the full stack trace.
+
+### Second improvement:
 
 ---
 
