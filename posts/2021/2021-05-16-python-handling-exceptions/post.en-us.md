@@ -220,6 +220,79 @@ Also, please note that I kept the "reraise" statements `raise` without redeclari
 
 I'm still not happy though. These logs are annoying me.
 
+### Third improvement: Better logging
+
+This step reminds me of the [Tell Don't ask principle](https://martinfowler.com/bliki/TellDontAsk.html) although it's not quite the same. Instead of me asking exception details to provide a meaningful message, they're already specific - they should do it themselves!
+
+```py
+### Exceptions
+
+class OrderCreationException(Exception):
+    pass
+
+
+class OrderNotFound(OrderCreationException):
+    def __init__(self, order_id):
+        self.order_id = order_id
+        super().__init__(
+            f"Order {order_id} was not found in db "
+            f"to emit."
+        )
+
+
+class ReceiptGenerationFailed(OrderCreationException):
+    def __init__(self, order_id):
+        self.order_id = order_id
+        super().__init__(
+            "Error found during emission! "
+            f"Order: {order_id}"
+        )
+
+
+class ReceiptEmissionFailed(OrderCreationException):
+    def __init__(self, order_id):
+        self.order_id = order_id
+        super().__init__(
+            "Emission failed! "
+            f"Order: {order_id} "
+        )
+
+### Main class
+
+class OrderService:
+    def emit(self, order_id: str) -> dict:
+        try:
+            ...
+        except OrderNotFound:
+            logger.exception("We got a database exception")
+            raise
+        except ReceiptGenerationFailed:
+            logger.exception("We got a problem generating the receipt")
+            raise
+        except ReceiptEmissionFailed:
+            logger.exception("Unable to emit the receipt")
+            raise
+        else:
+            return {"order_id": order_id, "order_status": order_status.value}
+```
+
+Oh, my eyes finally feel some relief. Less repetition for God sake! Note the recommended way of logging exceptions is exactly as I'm showing above: `logger.exception("ANY MESSAGE")`. **You don't even need to pass down the exception because it's already implicit**. Furthermore, the custom message we defined inside each exception with the `order_id` will be displayed in the logs - so you don't repeat yourself and you don't manipulate your inner exception data.
+
+Here's an output sample of how your logs would look like:
+
+```py
+❯ python3 testme.py
+Unable to emit the receipt # <<-- My log message
+Traceback (most recent call last):
+  File "/path/testme.py", line 19, in <module>
+    tryme()
+  File "/path/testme.py", line 14, in tryme
+    raise ReceiptEmissionFailed(order_id)
+ReceiptEmissionFailed: Emission failed! Order: 10 # <<-- My exception message
+```
+
+Now, whenever I raise this exception, the message is already set and clear and I don't need to remind myself of logging the `order_id` that generated it.
+
 ---
 
 Draft
