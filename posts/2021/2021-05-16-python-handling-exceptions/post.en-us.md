@@ -293,6 +293,52 @@ ReceiptEmissionFailed: Emission failed! Order: 10 # <<-- My exception message
 
 Now, whenever I raise this exception, the message is already set and clear and I don't need to remind myself of logging the `order_id` that generated it.
 
+### Final improvement: Simplify it
+
+After paying a closer a attention to our final code, it seems better, easy to read and to maintain.
+
+Honestly, it's not really managing bussiness logic, is it? It seems more like coordinating calls to actual bussiness logic services  which fits better as a [facade pattern](https://refactoring.guru/design-patterns/facade).
+
+Besides this, we can notice it asking to `status_service` for data to do something with it. (Which, this time, indeed breaks the idea of [Tell Don't Ask](https://martinfowler.com/bliki/TellDontAsk.html))
+
+Let's move on to simplifying.
+
+```py
+class OrderFacade:  # Renamed to match what is actually is
+    def emit(self, order_id: str) -> dict:
+        try:
+            # NOTE: info logging still happens inside
+            status_service.ensure_order_unlocked(order_id)
+            receipt_note = receipt_service.create(order_id)
+            broker.emit_receipt_note(receipt_note)
+            order_status = status_service.get_order_status(order_id)
+        except OrderAlreadyInProgress as e:
+            # New block
+            logger.info("Aborting emission request because it is already in progress!")
+            return {"order_id": order_id, "order_status": e.order_status.value}
+        except OrderAlreadyEmitted as e:
+            # New block
+            logger.info("Aborting emission because it already happened! {e}")
+            return {"order_id": order_id, "order_status": e.order_status.value}
+        except OrderNotFound:
+            logger.exception("We got a database exception")
+            raise
+        except ReceiptGenerationFailed:
+            logger.exception("We got a problem generating the receipt")
+            raise
+        except ReceiptEmissionFailed:
+            logger.exception("Unable to emit the receipt")
+            raise
+        else:
+            return {"order_id": order_id, "order_status": order_status.value}
+```
+
+Ok, tell me. How easier to read is it now?
+
+I can understand all possible returns with a quick eye sight. I know what happens when everything goes well and edge cases that may produce different outcomes. All of that without scrolling back and forth to understand scenarios.
+
+That's just simple as (mostly) every code should be.
+
 ---
 
 Draft
