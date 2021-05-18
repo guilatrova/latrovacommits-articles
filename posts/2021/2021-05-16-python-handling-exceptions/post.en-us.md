@@ -304,7 +304,7 @@ Besides this, we can notice it asking to `status_service` for data to do somethi
 Let's move on to simplifying.
 
 ```py
-class OrderFacade:  # Renamed to match what is actually is
+class OrderFacade:  # Renamed to match what it actually is
     def emit(self, order_id: str) -> dict:
         try:
             # NOTE: info logging still happens inside
@@ -335,19 +335,128 @@ class OrderFacade:  # Renamed to match what is actually is
 
 Ok, tell me. How easier to read is it now?
 
-I can understand all possible returns with a quick eye sight. I know what happens when everything goes well and edge cases that may produce different outcomes. All of that without scrolling back and forth to understand scenarios.
+I can understand all possible returns within a quick eye sight. I know what happens when everything goes well and edge cases that may produce different outcomes. All of that without scrolling back and forth to understand scenarios.
 
 That's just simple as (mostly) every code should be.
 
+Note that I decided to print exception object `e` in the logging since it would internally run `str(e)` which then returns the exception message.
+I felt for this specific case it would be helpful to be verbose since **we're not using `log.exception` for that block**, thus the exception message wouldn't show up.
+
+Now, let's break down the tricks to make your code always clear to read and easy to maintain.
+
+## Creating exceptions effectively
+
+Always categorize your exceptions with a base one, and extend all specific exceptions from that one. It's helpful and you might reuse logic for related code.
+
+Exceptions are objects that carry information with it, feel free to add custom attributes that might help you understand what's going on. Don't make your business code teaching exceptions how it should be built, it's hard to lose yourself with so many messages and details.
+
+```py
+# Base category exception
+class OrderCreationException(Exception):
+    pass
+
+
+# Specific error with custom message. Order id is required.
+class OrderNotFound(OrderCreationException):
+    def __init__(self, order_id):
+        self.order_id = order_id  # custom property
+        super().__init__(
+            f"Order {order_id} was not found in db "
+            f"to emit."
+        )
+
+
+# Specific error with custom message. Order id is required.
+class ReceiptGenerationFailed(OrderCreationException):
+    def __init__(self, order_id):
+        self.order_id = order_id  # custom property
+        super().__init__(
+            "Error found during emission! "
+            f"Order: {order_id}"
+        )
+```
+
+For the sample above I could go beyond and extend the base class to always receive an `order_id` if I wish.
+This helps getting my code clean because I don't have to be verbose when I create the exception. The usage just requires 1 var and that's it.
+
+```py
+def func1(order_id):
+    raise OrderNotFound(order_id)
+    # instead of raise OrderNotFound(f"Can't find order {order_id}")
+
+
+def func2(order_id):
+    raise OrderNotFound(order_id)
+    # instead of raise OrderNotFound(f"Can't find order {order_id}")
+```
+
+Testing it also makes more sense, since I can assert the `order_id` over a string.
+
+```py
+assert e.order_id == order_id
+# instead of assert order_id in str(e)
+```
+
+## Catching and raising exceptions effectively
+
+Another thing that people often end up doing wrong is catching and reraising.
+
+According to [Python's PEP 3134](https://www.python.org/dev/peps/pep-3134/), this is how you should be:
+
+**Raising the same exception**
+
+The bare `raise` statement is more than fine.
+
+```py
+try:
+    ...
+except CustomException as ex:
+    # do stuff (e.g. logging)
+    raise
+```
+
+**Raising from another exception**
+
+This one is particularly relevant since it keeps the whole stack trace and help your team debugging issue causes.
+
+```py
+try:
+    ...
+except CustomException as ex:
+    raise MyNewException() from ex
+```
+
+## Logging exceptions effectively
+
+Another piece of advice that will prevent you from being extremely verbose:
+
+**Use `logger.exception`**
+
+You don't have to log the exception object. The `exception` function of logger is intended to be used as is inside `except` blocks. It already handles the stack trace with execution info and displaying which exception caused it with its message as `ERROR` level!
+
+```py
+try:
+    ...
+except CustomException:
+    logger.exception("custom message")
+```
+
+**What if I it's not an error?**
+
+If for any reason you don't want to log an exception as `error`, maybe it's a `warning` or even `info` as you saw above.
+
+Then you might decide to set `exc_info` to `True` if you wish to keep the stack trace. Also it would be fine to use the exception object inside the message.
+
 ---
 
-Draft
+### References
 
-- Code impl. ()
-  - Taxare sample
-  - Domain concerns
-- Proper declaration of exceptions
-  - Effective Python (inherit)
-  - Create meaningful messages based on properties + type
-- Proper catching
-- Proper logging
+**Python Docs**
+
+- [Python `logging.logger.exception`](https://docs.python.org/3/library/logging.html#logging.Logger.exception)
+- [Python PEP 3134](https://www.python.org/dev/peps/pep-3134/)
+
+**Principles and Code Quality**
+
+- [Tell Don't Ask](https://martinfowler.com/bliki/TellDontAsk.html)
+- [Facade Pattern](https://refactoring.guru/design-patterns/facade)
