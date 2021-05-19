@@ -48,7 +48,7 @@ class OrderFacade:
             return {"order_id": order_id, "order_status": e.order_status.value}
         except OrderAlreadyEmitted as e:
             # New block
-            logger.info("Aborting emission because it already happened! {e}")
+            logger.info(f"Aborting emission because it already happened! {e}")
             return {"order_id": order_id, "order_status": e.order_status.value}
         except OrderNotFound:
             logger.exception("We got a database exception")
