@@ -16,11 +16,11 @@ Let's consider the following system, a microservice responsible for:
 
 ![flow](flow-before-improvements.png)
 
-Anything can break at any moment. You might have trouble with the order object missing important information, or maybe your printer is out of paper, maybe the IRS is out of service and you can't sync the receipt with them, or maybe, who know, your database is unavaiable at the moment.
+Anything can break at any moment. You might have trouble with the order object missing important information, or maybe your printer is out of paper, maybe the IRS is out of service and you can't sync the receipt with them, or maybe, who knows, your database is unavaiable at the moment.
 
 You must respond to any situation properly and proactively to mitigate errors when handling new orders.
 
-And this is the actual kind of code (which althought works, it's wrong and ineffective) that I see people writing:
+And this is the actual kind of code (which althought works, it's bad and ineffective) that I see people writing:
 
 ```py
 class OrderService:
@@ -96,7 +96,7 @@ In that sense, it makes me feel that the client is teaching the serving class wh
 
 Although this service works fine, it's hard to maintain, and it's not clear how one step correlates to the other due the repeated `except` blocks between every step which take away our attention on the "how" to think about "when".
 
-### First improvement: Make exceptions specific
+### 1️⃣ First improvement: Make exceptions specific
 
 Let's make the exceptions more accurate and specific first.
 The benefits can't be seen right away, so I'll not spend too much time explaining it right now. But please, pay attention as the code evolves.
@@ -127,7 +127,7 @@ except Exception as e:
 
 Note that this time I'm also benefiting of using `from e` which is the correct way of raising an exception from another and keeps the full stack trace.
 
-### Second improvement: Mind your own bussiness
+### 2️⃣ Second improvement: Mind your own bussiness
 
 Now that we have custom exceptions, we can move on "don't teaching classes what can go wrong" - they will report to us if it happens!
 
@@ -218,13 +218,13 @@ class OrderService:
 
 How does it feel? Much better, right? You have a single `try` block where you can logically follow to understand what happens next, you have grouped specific `except` blocks that helps you understand the "when" situations and edge cases, and lastly you have a `else` block outlining what would happen if everything is successful.
 
-Also, please note that I kept the "reraise" statements `raise` without redeclaring the exception object. It's not a typo. Actually that's the correct way of reraising the current exception: Simple not verbose.
+Also, please note that I kept the "reraise" statements `raise` without redeclaring the exception object. It's not a typo. Actually that's the correct way of reraising the current exception: Simple, not verbose.
 
 I'm still not happy though. These logs are annoying me.
 
-### Third improvement: Better logging
+### 3️⃣ Third improvement: Better logging
 
-This step reminds me of the [Tell Don't ask principle](https://martinfowler.com/bliki/TellDontAsk.html) although it's not quite the same. Instead of me asking exception details to provide a meaningful message, they're already specific - they should do it themselves!
+This step reminds me of the [Tell Don't Ask principle](https://martinfowler.com/bliki/TellDontAsk.html) although it's not quite the same. Instead of me asking exception details to provide a meaningful message, they should do it themselves - afterall they're already specific!
 
 ```py
 ### Exceptions
@@ -238,7 +238,7 @@ class OrderNotFound(OrderCreationException):
         self.order_id = order_id
         super().__init__(
             f"Order {order_id} was not found in db "
-            f"to emit."
+            "to emit."
         )
 
 
@@ -295,13 +295,13 @@ ReceiptEmissionFailed: Emission failed! Order: 10 # <<-- My exception message
 
 Now, whenever I raise this exception, the message is already set and clear and I don't need to remind myself of logging the `order_id` that generated it.
 
-### Final improvement: Simplify it
+### 4️⃣ Final improvement: Simplify it
 
 After paying a closer a attention to our final code, it seems better, easy to read and to maintain.
 
-Honestly, it's not really managing bussiness logic, is it? It seems more like coordinating calls to actual bussiness logic services  which fits better as a [facade pattern](https://refactoring.guru/design-patterns/facade).
+But... Is this `OrderService` managing bussiness logic? I don't think it's a service? It seems more like coordinating calls to actual bussiness logic services which fits better as a [facade pattern](https://refactoring.guru/design-patterns/facade).
 
-Besides this, we can notice it asking to `status_service` for data to do something with it. (Which, this time, indeed breaks the idea of [Tell Don't Ask](https://martinfowler.com/bliki/TellDontAsk.html))
+Besides this, we can notice it asking to `status_service` for data to do something with it. (Which, this time, indeed breaks the idea of [Tell Don't Ask](https://martinfowler.com/bliki/TellDontAsk.html)).
 
 Let's move on to simplifying.
 
@@ -335,28 +335,29 @@ class OrderFacade:  # Renamed to match what it actually is
             return {"order_id": order_id, "order_status": order_status.value}
 ```
 
+We just created a new `ensure_order_unlocked` method to our `status_service` which now is responsible for throwing exceptions/logging in case something is not right.
+
 Ok, tell me. How easier to read is it now?
 
-I can understand all possible returns within a quick eye sight. I know what happens when everything goes well and edge cases that may produce different outcomes. All of that without scrolling back and forth to understand scenarios.
+I can understand all possible returns within a quick eye sight. I know what happens when everything goes well and how edge cases may produce different outcomes. All of that without scrolling back and forth.
 
 That's just simple as (mostly) every code should be.
 
 Note that I decided to print exception object `e` in the logging since it would internally run `str(e)` which then returns the exception message.
-I felt for this specific case it would be helpful to be verbose since **we're not using `log.exception` for that block**, thus the exception message wouldn't show up.
+I felt it would be helpful to be verbose since **we're not using `log.exception` for that block**, thus the exception message wouldn't show up.
 
 Now, let's break down the tricks to make your code always clear to read and easy to maintain.
 
-## Creating exceptions effectively
+## 💣 Creating exceptions effectively
 
 Always categorize your exceptions with a base one, and extend all specific exceptions from that one. It's helpful and you might reuse logic for related code.
 
-Exceptions are objects that carry information with it, feel free to add custom attributes that might help you understand what's going on. Don't make your business code teaching exceptions how it should be built, it's hard to lose yourself with so many messages and details.
+Exceptions are objects that carry information with it, feel free to add custom attributes that might help you understand what's going on. Don't let your business code teach exceptions how it should be built, it's hard to lose yourself with so many messages and details.
 
 ```py
 # Base category exception
 class OrderCreationException(Exception):
     pass
-
 
 # Specific error with custom message. Order id is required.
 class OrderNotFound(OrderCreationException):
@@ -379,7 +380,7 @@ class ReceiptGenerationFailed(OrderCreationException):
 ```
 
 For the sample above I could go beyond and extend the base class to always receive an `order_id` if I wish.
-This helps getting my code clean because I don't have to be verbose when I create the exception. The usage just requires 1 var and that's it.
+This tip helps getting my code DRY because I don't have to be verbose when I create the exception. The usage just requires 1 var and that's it.
 
 ```py
 def func1(order_id):
@@ -399,7 +400,7 @@ assert e.order_id == order_id
 # instead of assert order_id in str(e)
 ```
 
-## Catching and raising exceptions effectively
+## 🧤 Catching and raising exceptions effectively
 
 Another thing that people often end up doing wrong is catching and reraising.
 
@@ -419,7 +420,7 @@ except CustomException as ex:
 
 **Raising from another exception**
 
-This one is particularly relevant since it keeps the whole stack trace and help your team debugging issue causes.
+This one is particularly relevant since it keeps the whole stack trace and help your team debugging root causes.
 
 ```py
 try:
@@ -428,13 +429,13 @@ except CustomException as ex:
     raise MyNewException() from ex
 ```
 
-## Logging exceptions effectively
+## 📝 Logging exceptions effectively
 
 Another piece of advice that will prevent you from being extremely verbose:
 
 **Use `logger.exception`**
 
-You don't have to log the exception object. The `exception` function of logger is intended to be used as is inside `except` blocks. It already handles the stack trace with execution info and displaying which exception caused it with its message as `ERROR` level!
+You don't have to log the exception object. The `exception` function of logger is intended to be used as is inside `except` blocks. It already handles the stack trace with execution info and displaying which exception caused it with its message set to `ERROR` level!
 
 ```py
 try:
@@ -462,3 +463,4 @@ Then you might decide to set `exc_info` to `True` if you wish to keep the stack 
 
 - [Tell Don't Ask](https://martinfowler.com/bliki/TellDontAsk.html)
 - [Facade Pattern](https://refactoring.guru/design-patterns/facade)
+- [The Blob](https://sourcemaking.com/antipatterns/the-blob)

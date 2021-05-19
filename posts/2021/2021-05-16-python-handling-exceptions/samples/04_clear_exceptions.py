@@ -11,7 +11,7 @@ class OrderNotFound(OrderCreationException):
         self.order_id = order_id
         super().__init__(
             f"Order {order_id} was not found in db "
-            f"to emit."
+            "to emit."
         )
 
 
