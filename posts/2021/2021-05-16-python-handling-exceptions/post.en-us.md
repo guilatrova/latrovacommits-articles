@@ -1,6 +1,6 @@
 # Handling exceptions in Python like a pro 🐍 💣
 
-One of the downsides of a flexible language like python is that people often assume that as long as something works then it's probably the proper way of doing so. I would like to write this humble guide on how to use effectively use python exceptions and how to handle exceptions and log them correctly.
+One of the downsides of a flexible language like python is that people often assume that as long as something works then it's probably the proper way of doing so. I would like to write this humble guide on how to effectively use python exceptions and how to handle exceptions and log them correctly.
 
 ## Handling exceptions effectively
 
@@ -9,10 +9,12 @@ One of the downsides of a flexible language like python is that people often ass
 Let's consider the following system, a microservice responsible for:
 
 - Listening to new order events;
-- Producing a receipt;
+- Retrieving the order from database
+- Checking printer status;
 - Printing the receipt;
-- Storing the receipt in the database;
 - Sending receipts to the Internal Revenue System (IRS);
+
+![flow](flow-before-improvements.png)
 
 Anything can break at any moment. You might have trouble with the order object missing important information, or maybe your printer is out of paper, maybe the IRS is out of service and you can't sync the receipt with them, or maybe, who know, your database is unavaiable at the moment.
 
