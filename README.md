@@ -51,6 +51,16 @@ So we end up with something like:
        that.png
 ```
 
+### Commits structure
+
+Standard: `year(post-id): msg`
+
+```
+2021(python-exceptions): draft
+2021(python-exceptions): first improvement
+2021(python-exceptions): revision
+```
+
 ### :octocat: GitHub flow
 
 - Create a new branch from `master`, you can PR if you want.
