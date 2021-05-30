@@ -1,4 +1,4 @@
-# Python Async with real-life examples
+# Python Async with real-life examples 🐍🔀
 
 Maybe it's just me, but I hate stupid examples. I hate reading about OOP with animal examples as much as I hate reading about async with the client using just sleep statements. Mostly because (considering you won't work for a zoo 🤷‍♂️) these examples will never get any close to real life.
 
@@ -64,9 +64,9 @@ In other words, the server can do anything it wishes, our client is just waiting
 Let's picture what's going on.
 As you can see below, the only bottleneck is the server response. Making a request and printing its results always take the same amount of time.
 
-(!PUT IMAGE HERE!)
+![http sync](http-sync.png)
 
-### Slow server (but optimized)
+### 🐶 Slow server (but optimized)
 
 Hopefully, you'll understand the issue. **We don't have to wait for every request to finish in order to perform further requests (in our case R2 and R3).** Again, considering we can't touch the server, thus it can't get any faster, the only option is to optimize how we perform the requests. If you bet `async` might help us, then yes, you're right.
 
@@ -126,10 +126,45 @@ Note the interesting points:
 - All the requests were made right away in the order we specified in code;
 - The responses were out of order (first **R2**, then **R3**, and only then **R1** finished);
 
-Now it starts to get interesting, here is where some people mistakenly think this is actually running in parallel, but no **it's not parallel, it's optimized (or async)**.
+Now it starts to get interesting, here is where some people mistakenly think this is actually running in parallel, but no, **it's not parallel, it's concurrent (i.e. async)**.
 
 See the following diagram:
 
+![http async](http-async.png)
+
+Hopefully it's simpler to understand how python async works. **There's no code being run at the same time.**
+
+This was me when I found out that async is not actually parallel, but concurrent:
+
+![me surprised for not knowing async is not parallel](pikachu-meme.jpeg)
+
+Everytime we run **`await`** (e.g. `await resp.text()`) we give control back to python (more specifically to the **event loop** as we're going to discuss later) to decide what to do in the meantime.
+
+In other words, async works better when you have to wait for IO operations (in this case network).
+
+### 🐌 Slow server (with a fake optimization)
+
+Now, you might think that's quite simple: Let's just use async whenever I have to request some IO resource!
+
+Well, it's not enough. You might have noticed we're using the `aiohttp` lib. I'm not using this lib because I prefer it over `requests`, I'm using it because I have to in order to perform async operations.
+
+To make that clear and obvious, you can find `async_w_sync.py` where it still use `requests`.
+Note how using `async def` for a method/function does not make it really async.
+
+```sh
+❯ python async_w_sync.py
+==========
+R1: Requesting 'http://localhost:8000/delay-me?seconds=10'
+R1: Request finally done! Server replied 'Done, I waited for 10 secs'
+R2: Requesting 'http://localhost:8000/delay-me?seconds=2'
+R2: Request finally done! Server replied 'Done, I waited for 2 secs'
+R3: Requesting 'http://localhost:8000/delay-me?seconds=5'
+R3: Request finally done! Server replied 'Done, I waited for 5 secs'
+----------
+Time elapsed: 17.042022314999997
+==========
+```
+
+**Declaring a function with `async def` does no magic trick, you need a lib that supports it.**
 
 
-### Slow server (with a fake optimization)
