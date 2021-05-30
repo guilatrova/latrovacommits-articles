@@ -126,4 +126,10 @@ Note the interesting points:
 - All the requests were made right away in the order we specified in code;
 - The responses were out of order (first **R2**, then **R3**, and only then **R1** finished);
 
+Now it starts to get interesting, here is where some people mistakenly think this is actually running in parallel, but no **it's not parallel, it's optimized (or async)**.
+
+See the following diagram:
+
+
+
 ### Slow server (with a fake optimization)
