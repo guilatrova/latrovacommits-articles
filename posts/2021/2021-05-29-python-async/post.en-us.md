@@ -167,4 +167,75 @@ Time elapsed: 17.042022314999997
 
 **Declaring a function with `async def` does no magic trick, you need a lib that supports it.**
 
+## Database
 
+Set up the intentional slow database with terrible queries:
+
+```bash
+cd database/pgsql
+docker compose up
+cd scripts
+python generatedb.py
+```
+
+### Sync
+
+```bash
+❯ python sync.py
+==========
+R1: Querying '
+    SELECT c.name, s.state FROM cities c
+    JOIN states s ON  c.state_id = s.id
+    WHERE s.state IN (
+        SELECT state FROM states
+    )
+    ORDER BY s.long_name, c.name
+'
+R1: Query made! Db replied '7789600' rows
+R2: Querying '
+    SELECT c.name, s.state FROM cities c
+    JOIN states s ON  c.state_id = s.id
+    WHERE c.name like 'A%'
+'
+R2: Query made! Db replied '575400' rows
+R3: Querying '
+    SELECT c.name, s.state FROM cities c
+    JOIN states s ON  c.state_id = s.id
+    WHERE s.state like 'M%' OR s.state like '%P'
+'
+R3: Query made! Db replied '2730000' rows
+----------
+Time elapsed: 22.872724297999998
+==========
+```
+
+### Async
+
+```bash
+❯ python async.py
+==========
+R1: Querying '
+    SELECT c.name, s.state FROM cities c
+    JOIN states s ON  c.state_id = s.id
+    WHERE s.state IN (
+        SELECT state FROM states
+    )
+    ORDER BY s.long_name, c.name
+'
+R2: Querying '
+    SELECT c.name, s.state FROM cities c
+    JOIN states s ON  c.state_id = s.id
+    WHERE c.name like 'A%'
+'
+R3: Querying '
+    SELECT c.name, s.state FROM cities c
+    JOIN states s ON  c.state_id = s.id
+    WHERE s.state like 'M%' OR s.state like '%P'
+'
+R2: Query made! Db replied '575400' rows
+R3: Query made! Db replied '2730000' rows
+R1: Query made! Db replied '7789600' rows
+----------
+Time elapsed: 18.440496856
+==========
+```
