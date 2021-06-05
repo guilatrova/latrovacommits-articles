@@ -288,7 +288,7 @@ You still can execute a coroutine by creating a task and getting its result late
 import asyncio
 
 async def anyfunc():
-     return 1
+    return 1
 
 async def main():
     r = anyfunc()
@@ -309,4 +309,4 @@ I believe it's time to present you the **Event Loop**.
 
 ### Event Loop
 
-Think about the event loop as a manager that decides what should happen and what should wait.
+Think about the event loop as a manager that decides what should happen and what should wait. Every time you invoke `await <coroutine>` you're saying: "Event Loop, please, decide what to do next".
