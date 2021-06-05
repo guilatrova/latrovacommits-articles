@@ -1,12 +1,12 @@
 # Python Async with real-life examples 🐍🔀
 
-Maybe it's just me, but I hate stupid examples. I hate reading about OOP with animal examples as much as I hate reading about async with the client using just sleep statements. Mostly because (considering you won't work for a zoo 🤷‍♂️) these examples will never get any close to real life.
+Maybe it's just me, but I hate stupid examples. I hate reading about OOP with animal examples as much as I hate reading about async with the client bare just `asyncio.sleep` statements. Mostly because (considering you won't work for a zoo 🤷‍♂️) these examples will never get any close to real life.
 
 I want then to explore async without talking about food (although I'm hungry right now) and using examples that you can actually feel and understand.
 
 ## Intro to the problem
 
-I don't want to start talking about solution (i.e. async), I want you to feel the problem first, I want you to actually run things locally from your own computer. To create the background we want to simulate I'll be using a repo for this located on [GitHub](https://github.com/guilatrova/python-async-scenarios) and I strongly recommend you to clone it so you can follow up with me.
+I don't want to start talking about the solution (i.e. async), **I want you to feel the problem first**, I want you to actually run things locally from your own computer. To create the background we want to simulate I'll be using a repo with scenarios available on [GitHub](https://github.com/guilatrova/python-async-scenarios) and I strongly recommend you to clone it so you can follow up with me.
 
 ```sh
 # Clone
@@ -21,7 +21,9 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-From now on I'll assume your did so.
+From now on I'll assume you did so. Please, run the commands with me! 😁
+
+## HTTP
 
 ### 🐌 Slow server
 
@@ -57,7 +59,7 @@ Time elapsed: 17.042340711999998
 
 Well, please open the `sync.py` code and get familiar with it. Note that we got 3 "requesters" responsible for pulling data from a URL in some server, as soon as they reply we print the response and move on.
 
-**Gui, you liar, you told me you wouldn't be using sleeps!!**. There's not really a `sleep` there. Note that who's actually making our code slower is rather the server (which let's pretend we can't control) and not the client.
+**Gui, you liar, you told me you wouldn't be using sleeps!!** There's not really a `sleep` there. Note that who's actually making our code slower is rather the server (which let's pretend we can't control) and not the client.
 
 In other words, the server can do anything it wishes, our client is just waiting for it to respond. If it helps, **try to think about it like a long operation triggered by HTTP to some third-party API out of your control.**
 
@@ -167,13 +169,23 @@ Time elapsed: 17.042022314999997
 
 **Declaring a function with `async def` does no magic trick, you need a lib that supports it.**
 
-## Database
+## 💽 Database
 
-Set up the intentional slow database with terrible queries:
+If you're demanding like me, you probably are still unhappy with a shady sleep commmand behind an API.
+
+That's why we're going to use a real database now with a real query. It was tricky to make the database/query intentionally slow (e.g. poor indexes, duplicated data, terrible joins), but the point is still valid to simulate and compare sync and async code.
+
+### 🇧🇷 Set up the database
+
+Let's set up the slow database with terrible queries.
+
+This script will add lots of repeated data about all Brazil cities. You might want to get some coffee while the script runs.
 
 ```bash
 cd database/pgsql
 docker compose up
+
+# Switch to another terminal and
 cd scripts
 python generatedb.py
 ```
@@ -209,7 +221,11 @@ Time elapsed: 22.872724297999998
 ==========
 ```
 
+Nothing really new to the overall structure except by the query/database.
+
 ### Async
+
+Let's try the `async` version now:
 
 ```bash
 ❯ python async.py
@@ -239,3 +255,9 @@ R1: Query made! Db replied '7789600' rows
 Time elapsed: 18.440496856
 ==========
 ```
+
+The first interesting thing to notice is how the 3 queries as triggered right away as we wait for the results.
+
+Another point worth mentioning is how **async is no fix for a bottleneck.** The code is still very slow, although we could optimize a bit (dropping from 22 secs to 18 secs).
+
+## Concurrenty and the Event Loop
