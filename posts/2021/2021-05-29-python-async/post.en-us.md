@@ -260,4 +260,53 @@ The first interesting thing to notice is how the 3 queries as triggered right aw
 
 Another point worth mentioning is how **async is no fix for a bottleneck.** The code is still very slow, although we could optimize a bit (dropping from 22 secs to 18 secs).
 
-## Concurrenty and the Event Loop
+## Concurrency, Coroutines and the Event Loop
+
+We saw and executed a lot of code without understanding what it actually does (it reminds me of my work), we're about to get deeper so we can understand it a bit better.
+Now things start getting a bit more complext. I'll do my best to not make it boring, I swear :) .
+
+So, as you could see, using async doesn't make your code parallel, it's more an **optimization of iddle time** (or concurrency as people prefer to call). We also noticed that making a function `async` when the libs/internal workings are `sync` make no effect at all!
+
+### Coroutines
+
+**Coroutines** are functions that can be started, paused, and resumed. Whenever you invoke an `async` function you are getting a coroutine.
+
+```py
+async def anyfunc():
+    return 1
+
+r = anyfunc()
+print(type(r))
+# Output: <class 'coroutine'>
+```
+
+Whenever you `await`, you're asking for the event loop to handle that coroutine and return a result to you. Note that coroutines never awaited are never executed.
+
+You still can execute a coroutine by creating a task and getting its result later:
+
+```py
+import asyncio
+
+async def anyfunc():
+     return 1
+
+async def main():
+    r = anyfunc()
+    task = asyncio.create_task(r)  # Coroutine is handled to the Event Loop
+
+    print(type(task))
+    # Output: <class '_asyncio.Task'>
+
+    print(await task)
+    # Output: 1
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+I believe it's time to present you the **Event Loop**.
+
+### Event Loop
+
+Think about the event loop as a manager that decides what should happen and what should wait.
