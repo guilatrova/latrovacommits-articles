@@ -399,3 +399,12 @@ class TrackerConsumer(AsyncWebsocketConsumer):
         logger.info(f"Connetion closed with {close_code} code")
         await self.tracker.dispose()
 ```
+
+### 🔖 References
+
+- [Asynchronous Python (2016)](https://medium.com/@nhumrich/asynchronous-python-45df84b82434) 👈 don't let the year make you think it's not worthy, it's best article I've read so far on the theme
+- [What is a Coroutine Anyway? - North Bay Python (2019)](https://www.youtube.com/watch?v=GSiZkP7cI80)
+- [Python Asynchronous Programming - AsyncIO & Async/Await (2021)](https://www.youtube.com/watch?v=t5Bo1Je9EmE)
+- [Python & Async Simplified (2018)](https://www.aeracode.org/2018/02/19/python-async-simplified/)
+- [Concurrency (2021)](https://sourcery.ai/blog/concurrency/)
+
