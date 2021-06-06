@@ -329,6 +329,73 @@ Eventually async functions are getting done! Since we used `asyncio.gather` even
 Given that simple explanation, I want to provoke you. What would happen if:
 
 - We had only one `async` requester function running?
+- We invoke a coroutine without `await` or `create_task`?
 - We used event loop in a program with not a single `async`? (by starting `asyncio.run` without any `await`)
 
 [TWEET HERE]
+
+# 🏍️ Real Life Example
+
+Again I want to make things as real as possible. The scenarios mentioned above are "somewhat real but artificial". Now I'm about to share a case where I actually had to use `async` in production to solve a real problem.
+
+Back when I worked at [Mimic](https://latamlist.com/brazilian-food-delivery-startup-mimic-receives-9m-seed-round/), we allowed our customers to watch their orders being delivered.
+
+Microservices of third parties provide their own interfaces to notify/poll the courier location (e.g. Uber and Rappi - [If you're curious to hear how we deal with different third party interfaces you might want to check this post](https://blog.guilatrova.dev/building-an-agnostic-microservice-architecture-with-kafka/)) so whenever we receive such data, we adapt, and publish it to Redis.
+
+Customers willing to watch their order trip can access a track link that initiates a websocket connection to a Django API that subscribes to a Redis channel. Whenever Redis receives a push notification, Django receives it and send over the websocket to the customer, providing real-time updates.
+
+![Real life flow](real-life.png)
+
+We created a small wrapper to create, subscribe to order updates and close redis connections using [`aioredis`](https://github.com/aio-libs/aioredis-py):
+
+```py
+import aioredis
+
+
+class OrderTracker:
+    async def get_redis(self):
+        if not self.redis:
+            self.redis = await aioredis.create_redis_pool(settings.REDIS_HOST)
+
+        return self.redis
+
+    async def subscribe(self, order_id: str):
+        redis = await self.get_redis()
+        (channel,) = await redis.subscribe(order_id)
+        return channel
+
+    async def dispose(self):
+        redis = await self.get_redis()
+        redis.close()
+        await redis.wait_closed()
+```
+
+Then we created our websocket interface with [django channels](https://github.com/django/channels)
+
+```py
+def notify_client(channel, callback):  # <-- Synchronous function that handles a coroutine to event loop
+    async def _handle_message():
+        async for message in channel.iter():  # <-- While we wait for Redis to publish something, we're free to do other stuff
+            logger.info(f"Got message: {message}")
+            await callback(message)  # We await the self.send here (see below)
+
+    # We can just ask Event Loop to handle that by creating a task,
+    # It's not needed to await for its result
+    asyncio.create_task(_handle_message())
+
+
+class TrackerConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        ...
+
+        channel = await self.tracker.subscribe(order_id)
+
+        await self.accept()  # <-- Websocket connection initiated
+
+        notify_client(channel, lambda msg: self.send(text_data=msg.decode("utf-8")))  # <-- self.send is a coroutine, intentionally not awaited
+
+
+    async def disconnect(self, close_code):
+        logger.info(f"Connetion closed with {close_code} code")
+        await self.tracker.dispose()
+```
