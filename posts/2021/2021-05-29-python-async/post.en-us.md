@@ -20,7 +20,7 @@ git clone https://github.com/guilatrova/python-async-scenarios.git
 cd python-async-scenarios
 
 # Create virtualenv
-python -m virtualenv .venv
+python3 -m virtualenv .venv
 source .venv/bin/activate
 
 # Install deps
@@ -36,11 +36,24 @@ From now on I'll assume you did so. Please, run the commands with me! 😁
 Please, start our silly API server:
 
 ```sh
-cd API/delay_api
-python manage.py runserver
+❯ cd API/delay_api
+❯ python manage.py runserver
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have 18 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
+Run 'python manage.py migrate' to apply them.
+June 06, 2021 - 16:03:09
+Django version 3.2.3, using settings 'delay_api.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
 ```
 
-It's fine to ignore the warnings regarding migrations, now open a new terminal and head to the client dir and execute the sync version of our client:
+It's fine to ignore the warnings regarding migrations.
+
+Now open a new terminal (don't forget to activate the virtualenv) and head to the client dir and execute the sync version of our client:
 
 ```sh
 cd API/client
@@ -115,7 +128,6 @@ if __name__ == "__main__":
 Let's execute and see how it performs in comparison to our first example:
 
 ```sh
-❯ cd API/client
 ❯ python async.py
 ==========
 R1: Requesting 'http://localhost:8000/delay-me?seconds=10'
@@ -178,6 +190,8 @@ If you're demanding like me, you probably are still unhappy with a shady sleep c
 
 That's why we're about to use a real database with a real query. It was tricky to make the database/query intentionally slow (e.g. poor indexes, duplicated data, terrible joins), but the point is still valid to simulate and compare sync and async code.
 
+You're free to stop the API server now.
+
 ### 🇧🇷 Set up the database
 
 This script will add lots of repeated data about all cities of Brazil. You might want to get some coffee while the script runs.
@@ -188,10 +202,12 @@ cd database/pgsql
 docker compose up
 
 # Switch to another terminal and
-cd scripts
+cd database/pgsql/scripts
 python generatedb.py
-# drink your coffee now
+# have your coffee now
 ```
+
+(You can rerun `python generatedb.py` as much as you want to make our scenarios even slower/easier to spot).
 
 The overral structure is the same, so hopefully there won't be anything new other than the query/database.
 
@@ -264,7 +280,7 @@ Time elapsed: 18.440496856
 ==========
 ```
 
-The first interesting thing to notice is how the 3 queries as triggered right away as we wait for the results.
+The first interesting thing to notice is how the 3 queries are triggered right away as we wait for the results.
 
 Another point worth mentioning is how **async is no fix for a bottleneck.** The code is still very slow, although we could optimize a bit (dropping from ~22 secs to ~18 secs).
 
