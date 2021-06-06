@@ -351,7 +351,7 @@ Think about the event loop as a manager that decides what should happen and what
 
 ![event loop receiving await commands](event-loop.png)
 
-In other words, within a sync program, you just run commands in sequence but programming in async means giving control back to the event loop occassionally.
+In other words, within a sync program, you just run commands in sequence but programming in async means giving control back to the event loop occasionally.
 
 From our example, we can imagine commands being executed as:
 
@@ -378,7 +378,7 @@ Again I want to make things as real as possible. The scenarios mentioned above a
 
 Back when I worked at [Mimic](https://latamlist.com/brazilian-food-delivery-startup-mimic-receives-9m-seed-round/), we allowed our customers to watch their orders being delivered (Damn it I promised we wouldn't be talking about food).
 
-Microservices of third parties like Uber and Rappi provide their own interfaces to notify/poll the courier location (If you're curious to hear how we deal with different third party interfaces you might want to [check this post](https://blog.guilatrova.dev/building-an-agnostic-microservice-architecture-with-kafka/)) so whenever we receive such data, we adapt and publish it to Redis.
+Microservices of third parties like Uber and Rappi provide their interfaces to notify/poll the courier location (If you're curious to hear how we deal with different third party interfaces you might want to [check this post](https://blog.guilatrova.dev/building-an-agnostic-microservice-architecture-with-kafka/)) so whenever we receive such data, we adapt and publish it to Redis.
 
 Customers willing to watch their order trip can access a tracking link that initiates a WebSocket connection to a Django API that in turn subscribes to a Redis channel. Whenever Redis receives a push notification, Django receives it and sends over the WebSocket to the customer, providing real-time updates.
 
