@@ -329,7 +329,7 @@ async def anyfunc():
 
 async def main():
     r = anyfunc()
-    task = asyncio.create_task(r)  # Coroutine is handled to the Event Loop
+    task = asyncio.create_task(r)  # Coroutine is handed over to the Event Loop
 
     print(type(task))
     # Output: <class '_asyncio.Task'>
@@ -411,7 +411,7 @@ class OrderTracker:
 Then we created our websocket interface with [django channels](https://github.com/django/channels):
 
 ```py
-def notify_client(channel, callback):  # <-- Synchronous function that handles a coroutine to event loop
+def notify_client(channel, callback):  # <-- Synchronous function that hands a coroutine to the event loop
     async def _handle_message():
         async for message in channel.iter():  # <-- While we wait for Redis to publish something, we're free to do other stuff
             logger.info(f"Got message: {message}")
