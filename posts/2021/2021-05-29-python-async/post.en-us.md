@@ -408,7 +408,7 @@ class OrderTracker:
         await redis.wait_closed()
 ```
 
-Then we created our websocket interface with [django channels](https://github.com/django/channels):
+Then we created our WebSocket interface with [django channels](https://github.com/django/channels):
 
 ```py
 def notify_client(channel, callback):  # <-- Synchronous function that hands a coroutine to the event loop
