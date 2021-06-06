@@ -267,7 +267,7 @@ Now things start getting a bit more complext. I'll do my best to not make it bor
 
 So, as you could see, using async doesn't make your code parallel, it's more an **optimization of iddle time** (or concurrency as people prefer to call). We also noticed that making a function `async` when the libs/internal workings are `sync` make no effect at all!
 
-### Coroutines
+### ⏯️ Coroutines
 
 **Coroutines** are functions that can be started, paused, and resumed. Whenever you invoke an `async` function you are getting a coroutine.
 
@@ -307,6 +307,28 @@ if __name__ == "__main__":
 
 I believe it's time to present you the **Event Loop**.
 
-### Event Loop
+### 🔁 Event Loop
 
-Think about the event loop as a manager that decides what should happen and what should wait. Every time you invoke `await <coroutine>` you're saying: "Event Loop, please, decide what to do next".
+Think about the event loop as a manager that decides what should happen and what should wait. Every time you invoke `await <coroutine>` you're saying: "Event Loop, please, decide what to do next". Reusing our example on having 3 requesters, that's  how you can imagine the process:
+
+![event loop receiving await commands](event-loop.png)
+
+In other words, within a sync program, you just run commands in sequence but programming in async means giving control back to the event loop frequently.
+
+If we get deeper into the commands being executed we can imagine the following flow where
+
+- sync statements (`print`, `timeit`, etc) are run right away giving **no chance** to the event loop to even think about what to do next;
+- casual `await` statements notifying the event loop that it might be a good time to pause and do something else;
+
+![event deciding](event-loop-starting.png)
+
+Eventually async functions are getting done! Since we used `asyncio.gather` event loop will keep waiting for the remaining tasks (R1, R3) to move on to complete the program:
+
+![event loop finishing some tasks](event-loop-deciding.png)
+
+Given that simple explanation, I want to provoke you. What would happen if:
+
+- We had only one `async` requester function running?
+- We used event loop in a program with not a single `async`? (by starting `asyncio.run` without any `await`)
+
+[TWEET HERE]
