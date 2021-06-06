@@ -1,12 +1,18 @@
-# Python Async with real-life examples 🐍🔀
+# Python Async in real-life 🐍🔀
 
-Maybe it's just me, but I hate stupid examples. I hate reading about OOP with animal examples as much as I hate reading about async with the client bare just `asyncio.sleep` statements. Mostly because (considering you won't work for a zoo 🤷‍♂️) these examples will never get any close to real life.
+Maybe it's just me, but I hate stupid examples. I hate reading about OOP with animal examples as much as I hate reading about async with the client using bare `asyncio.sleep` statements. Mostly because (considering you won't work for a zoo 🤷‍♂️) these examples will never get any close to real life.
 
-I want then to explore async without talking about food (although I'm hungry right now) and using examples that you can actually feel and understand.
+I want then to explore async without talking about food (although I'm hungry right now) and using examples that you can actually run yourself and understand.
+So, the plan is to:
 
-## Intro to the problem
+- Explore `async` with slow HTTP queries;
+- Explore `async` with slow Database queries;
+- Share a real project running in production that uses `async`;
 
-I don't want to start talking about the solution (i.e. async), **I want you to feel the problem first**, I want you to actually run things locally from your own computer. To create the background we want to simulate I'll be using a repo with scenarios available on [GitHub](https://github.com/guilatrova/python-async-scenarios) and I strongly recommend you to clone it so you can follow up with me.
+## 🗺️ Set up
+
+I don't want to start talking about the solution (i.e. async), **I want you to feel the problem first**, I want you to actually run things locally from your own computer.
+To create the background we want to simulate I'll be using a repo with all scenarios available on [GitHub](https://github.com/guilatrova/python-async-scenarios) and I strongly recommend you to clone it so you can follow up with me.
 
 ```sh
 # Clone
@@ -23,7 +29,7 @@ pip install -r requirements.txt
 
 From now on I'll assume you did so. Please, run the commands with me! 😁
 
-## HTTP
+## ⏬ HTTP
 
 ### 🐌 Slow server
 
@@ -34,7 +40,7 @@ cd API/delay_api
 python manage.py runserver
 ```
 
-It's fine to ignore the warnings re migrations, now open a new terminal and head to the client dir and execute the sync one:
+It's fine to ignore the warnings regarding migrations, now open a new terminal and head to the client dir and execute the sync version of our client:
 
 ```sh
 cd API/client
@@ -59,20 +65,21 @@ Time elapsed: 17.042340711999998
 
 Well, please open the `sync.py` code and get familiar with it. Note that we got 3 "requesters" responsible for pulling data from a URL in some server, as soon as they reply we print the response and move on.
 
-**Gui, you liar, you told me you wouldn't be using sleeps!!** There's not really a `sleep` there. Note that who's actually making our code slower is rather the server (which let's pretend we can't control) and not the client.
+**Gui, you liar, you told me you wouldn't be using sleeps!!** There's not really a `sleep` there. Note that **who's actually making our code slower is rather the server** (which let's pretend we can't control) and not the client.
 
 In other words, the server can do anything it wishes, our client is just waiting for it to respond. If it helps, **try to think about it like a long operation triggered by HTTP to some third-party API out of your control.**
 
-Let's picture what's going on.
-As you can see below, the only bottleneck is the server response. Making a request and printing its results always take the same amount of time.
+Given that context, let's observe how our code behaves across the time:
 
 ![http sync](http-sync.png)
 
+As you can see below, the only bottleneck is the server response. Making a request and printing its results always take the same amount of time. Keeping our software iddle while waiting for the server to respond is not really great, is it?
+
 ### 🐶 Slow server (but optimized)
 
-Hopefully, you'll understand the issue. **We don't have to wait for every request to finish in order to perform further requests (in our case R2 and R3).** Again, considering we can't touch the server, thus it can't get any faster, the only option is to optimize how we perform the requests. If you bet `async` might help us, then yes, you're right.
+Now that you observed the issue, you might have realized that **we don't have to wait for every request to finish in order to perform further requests (in our case R2 and R3).** Again, considering we can't touch the server, thus it can't get any faster, the only option is to optimize how we perform the requests. If you bet `async` might help us, then yes, you're right.
 
-In the same directory (`API/client`), you're about to find a file named `async.py`. Before running commands, I want to highlight some major differences:
+In the same directory (`API/client`), you're about to find a file named `async.py`. Before running it I want to highlight some major differences:
 
 ```py
 import asyncio
@@ -105,7 +112,7 @@ if __name__ == "__main__":
     asyncio.run(main())  # <-- We use asyncio.run to start our main function
 ```
 
-Before getting into the details, let's execute and see how it performs in comparison to our first example.
+Let's execute and see how it performs in comparison to our first example:
 
 ```sh
 ❯ cd API/client
@@ -128,32 +135,28 @@ Note the interesting points:
 - All the requests were made right away in the order we specified in code;
 - The responses were out of order (first **R2**, then **R3**, and only then **R1** finished);
 
-Now it starts to get interesting, here is where some people mistakenly think this is actually running in parallel, but no, **it's not parallel, it's concurrent (i.e. async)**.
-
-See the following diagram:
+Now it starts to get interesting, here is where some people mistakenly think this is actually running in parallel, but no, **it's not parallel, it's concurrent.** See:
 
 ![http async](http-async.png)
 
-Hopefully it's simpler to understand how python async works. **There's no code being run at the same time.**
-
-This was me when I found out that async is not actually parallel, but concurrent:
+Hopefully the diagram made it simpler to understand how python async works. **There's no code being run at the same time.**
 
 ![me surprised for not knowing async is not parallel](pikachu-meme.jpeg)
 
-Everytime we run **`await`** (e.g. `await resp.text()`) we give control back to python (more specifically to the **event loop** as we're going to discuss later) to decide what to do in the meantime.
+Everytime we run **`await`** (e.g. `await resp.text()`) we give control back to python (more specifically to the **event loop** as we're going to see soon) to decide what to do in the meantime.
 
-In other words, async works better when you have to wait for IO operations (in this case network).
+In other words, **async only "works" when you have to wait for IO operations**.
 
 ### 🐌 Slow server (with a fake optimization)
 
-Now, you might think that's quite simple: Let's just use async whenever I have to request some IO resource!
+Now, you might think that's quite simple: Let's just use `async` whenever I have some IO work!
 
-Well, it's not enough. You might have noticed we're using the `aiohttp` lib. I'm not using this lib because I prefer it over `requests`, I'm using it because I have to in order to perform async operations.
+Well, it's just not enough. You might have noticed we're using the `aiohttp` lib. I'm not using this lib because I prefer it over `requests`, I'm using it because *I have to* in order to perform async operations.
 
-To make that clear and obvious, you can find `async_w_sync.py` where it still use `requests`.
+To make that clear and obvious, you can find in the same directory `async_w_sync.py` where it still use `async def` and the `requests` lib.
 Note how using `async def` for a method/function does not make it really async.
 
-```sh
+```bash
 ❯ python async_w_sync.py
 ==========
 R1: Requesting 'http://localhost:8000/delay-me?seconds=10'
@@ -173,13 +176,12 @@ Time elapsed: 17.042022314999997
 
 If you're demanding like me, you probably are still unhappy with a shady sleep commmand behind an API.
 
-That's why we're going to use a real database now with a real query. It was tricky to make the database/query intentionally slow (e.g. poor indexes, duplicated data, terrible joins), but the point is still valid to simulate and compare sync and async code.
+That's why we're about to use a real database with a real query. It was tricky to make the database/query intentionally slow (e.g. poor indexes, duplicated data, terrible joins), but the point is still valid to simulate and compare sync and async code.
 
 ### 🇧🇷 Set up the database
 
-Let's set up the slow database with terrible queries.
-
-This script will add lots of repeated data about all Brazil cities. You might want to get some coffee while the script runs.
+This script will add lots of repeated data about all cities of Brazil. You might want to get some coffee while the script runs.
+Let's do this!
 
 ```bash
 cd database/pgsql
@@ -188,11 +190,17 @@ docker compose up
 # Switch to another terminal and
 cd scripts
 python generatedb.py
+# drink your coffee now
 ```
 
-### Sync
+The overral structure is the same, so hopefully there won't be anything new other than the query/database.
+
+### 🐌 Slow query
+
+Go ahead and try the sync version:
 
 ```bash
+❯ cd database/pgsql/client
 ❯ python sync.py
 ==========
 R1: Querying '
@@ -221,9 +229,9 @@ Time elapsed: 22.872724297999998
 ==========
 ```
 
-Nothing really new to the overall structure except by the query/database.
+Simillarly to the first example, our software only moves on to the next step once the database responds to the query.
 
-### Async
+### 🐶 Slow query (but optimized)
 
 Let's try the `async` version now:
 
@@ -258,18 +266,17 @@ Time elapsed: 18.440496856
 
 The first interesting thing to notice is how the 3 queries as triggered right away as we wait for the results.
 
-Another point worth mentioning is how **async is no fix for a bottleneck.** The code is still very slow, although we could optimize a bit (dropping from 22 secs to 18 secs).
+Another point worth mentioning is how **async is no fix for a bottleneck.** The code is still very slow, although we could optimize a bit (dropping from ~22 secs to ~18 secs).
 
-## Concurrency, Coroutines and the Event Loop
+## 🐍 Concurrency, Coroutines and the Event Loop
 
-We saw and executed a lot of code without understanding what it actually does (it reminds me of my work), we're about to get deeper so we can understand it a bit better.
-Now things start getting a bit more complext. I'll do my best to not make it boring, I swear :) .
+We saw and executed a lot of python code without really understanding what it does, we're about to get deeper into the theme so we can understand it a bit better. I'll do my best to not make it boring, I swear :) .
 
-So, as you could see, using async doesn't make your code parallel, it's more an **optimization of iddle time** (or concurrency as people prefer to call). We also noticed that making a function `async` when the libs/internal workings are `sync` make no effect at all!
+So, as you could see, using async doesn't make your code parallel, it's more an **optimization of iddle time** (or concurrent as people prefer to call). We also noticed that making a function `async` when the libs/internal workings are `sync` make no effect at all (it might even get slower)!
 
 ### ⏯️ Coroutines
 
-**Coroutines** are functions that can be started, paused, and resumed. Whenever you invoke an `async` function you are getting a coroutine.
+**Coroutines** are functions that can be started, paused, and resumed. Whenever you invoke an `async` function you are getting a coroutine. Try it:
 
 ```py
 async def anyfunc():
@@ -280,7 +287,21 @@ print(type(r))
 # Output: <class 'coroutine'>
 ```
 
-Whenever you `await`, you're asking for the event loop to handle that coroutine and return a result to you. Note that coroutines never awaited are never executed.
+Whenever you `await`, you're asking for the event loop to handle that coroutine and return a result to you. Note that coroutines never awaited are never executed. Try:
+
+```py
+import asyncio
+
+async def anyfunc():
+     return 1
+
+async def main():
+     anyfunc()
+
+if __name__ == "__main__":
+     asyncio.run(main())
+     # Output: RuntimeWarning: coroutine 'anyfunc' was never awaited
+```
 
 You still can execute a coroutine by creating a task and getting its result later:
 
@@ -300,53 +321,54 @@ async def main():
     print(await task)
     # Output: 1
 
-
 if __name__ == "__main__":
     asyncio.run(main())
 ```
+
+> (Note I used a stupid `return 1` statement because the focus is to show how python deals with coroutines. Hopefully by now you understand that this code makes no sense and also understand the why!).
 
 I believe it's time to present you the **Event Loop**.
 
 ### 🔁 Event Loop
 
-Think about the event loop as a manager that decides what should happen and what should wait. Every time you invoke `await <coroutine>` you're saying: "Event Loop, please, decide what to do next". Reusing our example on having 3 requesters, that's  how you can imagine the process:
+Think about the event loop as a manager that decides what should happen and what should wait. Every time you invoke `await <coroutine>` you're saying: "Event Loop, please, decide what to do next". By reusing our example on having 3 requesters, that's  how you can imagine the process:
 
 ![event loop receiving await commands](event-loop.png)
 
-In other words, within a sync program, you just run commands in sequence but programming in async means giving control back to the event loop frequently.
+In other words, within a sync program, you just run commands in sequence but programming in async means giving control back to the event loop ocassionally.
 
-If we get deeper into the commands being executed we can imagine the following flow where
+From our example, we can imagine commands being executed as:
 
 - sync statements (`print`, `timeit`, etc) are run right away giving **no chance** to the event loop to even think about what to do next;
 - casual `await` statements notifying the event loop that it might be a good time to pause and do something else;
 
 ![event deciding](event-loop-starting.png)
 
-Eventually async functions are getting done! Since we used `asyncio.gather` event loop will keep waiting for the remaining tasks (R1, R3) to move on to complete the program:
+Eventually async functions are getting done! Since we used `asyncio.gather` event loop will keep waiting for all the tasks (R1, R3) to move on to completion:
 
 ![event loop finishing some tasks](event-loop-deciding.png)
 
 Given that simple explanation, I want to provoke you. What would happen if:
 
-- We had only one `async` requester function running?
+- We have only one `async` requester function running?
 - We invoke a coroutine without `await` or `create_task`?
 - We used event loop in a program with not a single `async`? (by starting `asyncio.run` without any `await`)
 
 [TWEET HERE]
 
-# 🏍️ Real Life Example
+## 🏍️ Real Life Example
 
 Again I want to make things as real as possible. The scenarios mentioned above are "somewhat real but artificial". Now I'm about to share a case where I actually had to use `async` in production to solve a real problem.
 
-Back when I worked at [Mimic](https://latamlist.com/brazilian-food-delivery-startup-mimic-receives-9m-seed-round/), we allowed our customers to watch their orders being delivered.
+Back when I worked at [Mimic](https://latamlist.com/brazilian-food-delivery-startup-mimic-receives-9m-seed-round/), we allowed our customers to watch their orders being delivered (Damn it I promised we wouldn't be talking about food).
 
-Microservices of third parties provide their own interfaces to notify/poll the courier location (e.g. Uber and Rappi - [If you're curious to hear how we deal with different third party interfaces you might want to check this post](https://blog.guilatrova.dev/building-an-agnostic-microservice-architecture-with-kafka/)) so whenever we receive such data, we adapt, and publish it to Redis.
+Microservices of third parties like Uber and Rappi provide their own interfaces to notify/poll the courier location (If you're curious to hear how we deal with different third party interfaces you might want to [check this post](https://blog.guilatrova.dev/building-an-agnostic-microservice-architecture-with-kafka/)) so whenever we receive such data, we adapt, and publish it to Redis.
 
-Customers willing to watch their order trip can access a track link that initiates a websocket connection to a Django API that subscribes to a Redis channel. Whenever Redis receives a push notification, Django receives it and send over the websocket to the customer, providing real-time updates.
+Customers willing to watch their order trip can access a track link that initiates a websocket connection to a Django API that in turn subscribes to a Redis channel. Whenever Redis receives a push notification, Django receives it and send over the websocket to the customer, providing real-time updates.
 
 ![Real life flow](real-life.png)
 
-We created a small wrapper to create, subscribe to order updates and close redis connections using [`aioredis`](https://github.com/aio-libs/aioredis-py):
+We created a small wrapper to create/close redis connections and to subscribe to order updates using [`aioredis`](https://github.com/aio-libs/aioredis-py):
 
 ```py
 import aioredis
@@ -370,7 +392,7 @@ class OrderTracker:
         await redis.wait_closed()
 ```
 
-Then we created our websocket interface with [django channels](https://github.com/django/channels)
+Then we created our websocket interface with [django channels](https://github.com/django/channels):
 
 ```py
 def notify_client(channel, callback):  # <-- Synchronous function that handles a coroutine to event loop
@@ -380,7 +402,7 @@ def notify_client(channel, callback):  # <-- Synchronous function that handles a
             await callback(message)  # We await the self.send here (see below)
 
     # We can just ask Event Loop to handle that by creating a task,
-    # It's not needed to await for its result
+    # We don't want to wait for the result
     asyncio.create_task(_handle_message())
 
 
@@ -407,4 +429,3 @@ class TrackerConsumer(AsyncWebsocketConsumer):
 - [Python Asynchronous Programming - AsyncIO & Async/Await (2021)](https://www.youtube.com/watch?v=t5Bo1Je9EmE)
 - [Python & Async Simplified (2018)](https://www.aeracode.org/2018/02/19/python-async-simplified/)
 - [Concurrency (2021)](https://sourcery.ai/blog/concurrency/)
-
