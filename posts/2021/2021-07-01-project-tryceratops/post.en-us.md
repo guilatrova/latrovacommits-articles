@@ -170,9 +170,55 @@ def parse_ignore_comments(content: TextIOWrapper) -> Generator[IgnoreViolation, 
 
 Then I ended up with a tuple of: filename, parsed ast, list of comments.
 
-### Defining and testing violations
+### Testing scenarios with Pytest
+
+Another cool challenge was: how to write tests?
+There's a directory `tests/samples` for python files that intentionally violates specific rules.
+
+The testing got very simple once I defined 2 helper functions: `read_sample` and `assert_violation`
+
+```py
+def read_sample(filename: str) -> ast.AST:
+    ref_dir = f"{os.path.dirname(__file__)}/samples/violations/"
+    path = f"{ref_dir}{filename}.py"
+
+    with open(path) as sample:
+        content = sample.read()
+        loaded = ast.parse(content)
+        return loaded
+
+
+def assert_violation(code: str, msg: str, line: int, col: int, violation: Violation):
+    assert violation.line == line
+    assert violation.col == col
+    assert violation.code == code
+    assert violation.description == msg
+```
+
+Testing violations got very simple, I don't need to mock anything.
+
+```py
+def test_verbose_reraise():
+    tree = read_sample("except_verbose_reraise")
+    analyzer = analyzers.ExceptVerboseReraiseAnalyzer()
+    code, msg = codes.VERBOSE_RERAISE
+
+    assert_verbose = partial(assert_violation, code, msg)  # <-- I'm lazy, make function shorter
+
+    violations = analyzer.check(tree, "filename")  # <-- Run analyzer
+    assert len(violations) == 2
+    first, second = violations
+
+    assert_verbose(20, 8, first)  # <-- assert line, offset, expected violation
+    assert_verbose(28, 12, second)  # <-- assert line, offset, expected violation
+```
+
+After getting the first analyzer passing, I started following a full TDD approach.
+It's hard to test such stuff manually, so writing unit tests before code makes it easier to progress.
 
 ## CLI and Configs
+
+Once the analyzers were set I needed to make it usable, and from your CLI.
 
 ### Using `click` as Python CLI
 
@@ -180,3 +226,11 @@ Then I ended up with a tuple of: filename, parsed ast, list of comments.
 
 ## Publishing Package to Pypi with Flit
 
+
+### Credits
+
+Thanks to God for the inspiration 🙌 ☁️ ☀️
+
+Logo icon was made by [https://www.freepik.com](Freepik)
+
+The [black](https://github.com/psf/black) project for insights.
