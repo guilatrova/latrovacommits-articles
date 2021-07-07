@@ -366,9 +366,41 @@ It's a very great idea to check on `.git` or `pyproject.toml` itself to decide w
 
 ## Publishing Package to Pypi with Flit
 
+Publishing to pypi is the fun part! Making it available and easy distributable for everyone so a dev can simply `pip install tryceratops` is magic.
+There's several distinct ways of publishing a package to Pypi, and it seems that [`flit`](https://flit.readthedocs.io/en/latest/) is the simplest one that I tried so far.
 
-## What's still missing?
+I didn't have to care about creating a `setup.py` and [the docs](https://docs.python.org/3/distutils/setupscript.html) seemed too boring in comparison to the simplicity of writing a [config in pyproject](https://github.com/guilatrova/tryceratops/blob/c574aec/pyproject.toml#L5-L21).
 
+The only challenge is to (remember to) keep `requires` up to date. I released two versions already without the proper dependencies set 😝.
+
+## 🛣 Roadmap and Plans
+
+I'm tracking progress in the [GitHub project](https://github.com/guilatrova/tryceratops/projects/1) so anyone can check out.
+
+But to summarize, I would say the most important points are:
+
+### 🕵️‍♀️ Test it more and collect real user feedback
+
+Is it really useful? Does it really work? Is there any hidden bug?
+
+Such questions I can only find out by using more and more the tool.
+
+It's hard to promote something that is stil beta, hopefully I'll figure this out as I keep working on it.
+Please, let me know if you/your company found it useful, I'd be flattered to add your company or project to the main readme as a "Tryceratops Supporter" 🦖🏆 !
+
+Critics and feedback is ALWAYS welcome, tell me if you hate it! I swear I won't cry too loud 🥲.
+
+### 🚀 Implement a proper CI/CD
+
+So far the release process is very manual! It requires me to run `flit`, update readme with new version, create a release on GitHub (for pre-commit) and I can't ensure tests are still passing.
+
+I already started following [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) which is the perfect match of [semantic relase](https://python-semantic-release.readthedocs.io/en/latest/) to automate versioning + generate changelogs + releases. I hope I can find the time to implement it someday later in the future.
+
+### 🚧 Extend violations and analyzers with more scenarios
+
+I need more scenarios! Yes, it's hard to create situations! For example, I realized that `TC003` is raised for: `raise Exception("long message")` but not for `raise module.Exception("long message")`. I totally need to find edge cases and make this tool robust, otherwise it fails by not providing the expected value!!
+
+Besides this, I believe there's still value in adding a few more violations for the `logging` usage within `except` blocks (which I don't think people usually know how to use properly).
 
 ### Credits
 
