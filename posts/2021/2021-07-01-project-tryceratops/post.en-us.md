@@ -26,7 +26,7 @@ https://twitter.com/guilatrova/status/1406205142224023552
 
 It seemed so hard that I wondered if I would be able to do it. **More important than that, I realized that:**
 
-### 📈 People seemed interested into writing better exceptions in Python
+### 📈 People seemed interested in writing better exceptions in Python
 
 After publishing my article on [Handling exceptions in Python like a pro 🐍 💣](https://blog.guilatrova.dev/handling-exceptions-in-python-like-a-pro/) I got so surprised by the increased traffic in this blog:
 
@@ -36,11 +36,11 @@ It went from ~1-2 people daily (me and my mom probably) to ~20-50 people daily.
 
 ![traffic today](traffic-today.png)
 
-So it made me think that writing good and well defined try/except blocks would be something that developers would like to do.
+So it made me think that writing good and well-defined try/except blocks would be something that developers would like to do.
 
 ### 🍰 Linters make your life easier
 
-Without linters, would you be able manage every unused import in your project? Maybe, but it would be a pain and it's very easy to forget about it.
+Without linters, would you be able to manage every unused import in your project? Maybe, but it would be a pain and it's very easy to forget about it.
 
 That's another reason that made me realize that having a tool to check my code and give me feedback is a great way to keep the quality without the struggle.
 
@@ -55,7 +55,7 @@ Thank God it was not required. Python has `ast` that made it insanely simple.
 
 ### 🌳 Interpreting code with AST
 
-AST stands for `Abstract Syntax Trees` which means you can read Python code, any block you wish, iterate over the syntax and process it.
+AST stands for `Abstract Syntax Trees` which means you can read Python code, any block you wish, iterate over the syntax, and process it.
 Combine this with [`astpretty`](https://github.com/asottile/astpretty) and you have a powerful debugging tool.
 
 My process developing this linter was:
@@ -103,7 +103,7 @@ Module(
 )
 ```
 
-As you can see, the top level object is the `Module` which contains a `body` with `Expr` and `FunctionDef`, which also has a `body` and so on...
+As you can see, the top-level object is the `Module` which contains a `body` with `Expr` and `FunctionDef`, which also has a `body` and so on...
 
 The effort to achieve that is nearly 0, your only job is to read the python file as text and invoke `ast.parse`.
 
@@ -134,7 +134,7 @@ except Exception:
     raise  # <-- This is clean
 ```
 
-For such case, with `astpretty` help, I learned that I want to visit `ExceptHandler` objects that contains any `name`, and iterate from there to find violations. [The final analyzer code is:](https://github.com/guilatrova/tryceratops/blob/56dbdf8/src/tryceratops/analyzers/exception_block.py#L24-L41):
+With `astpretty` help I learned that I want to visit `ExceptHandler` objects that contains any `name`, and iterate from there to find violations. [The final analyzer code is:](https://github.com/guilatrova/tryceratops/blob/56dbdf8/src/tryceratops/analyzers/exception_block.py#L24-L41):
 
 ```py
 class ExceptVerboseReraiseAnalyzer(BaseAnalyzer, ast.NodeVisitor):  # <-- Inherit from ast.NodeVisitor
@@ -165,7 +165,7 @@ After gathering all violations in code using `ast`, I thought it would be very e
 
 Turns out that I was wrong...
 
-`ast` does not handle comments, afterall, comments are not really python code.
+`ast` does not handle comments, after all, comments are not python code.
 
 I had then to use another lib (`tokenize`) to do that. This was boring because I had to read line by line and filter any comments that matches a regex, see the function:
 
@@ -177,11 +177,11 @@ def parse_ignore_comments(content: TextIOWrapper) -> Generator[IgnoreViolation, 
                 yield _build_ignore_line(match, start)
 ```
 
-Then Tryceratops CLI ended up handling a tuple of: filename, parsed ast, list of comments.
+Then Tryceratops CLI ended up handling a tuple: [`(filename, ast, ignored-comments)`](https://github.com/guilatrova/tryceratops/blob/dabba76/src/tryceratops/types.py#L6).
 
 ### 🚦 Testing scenarios with Pytest
 
-Another cool challenge was: how to write tests? How can someone keep track of python code to be tested under python code?
+Another cool challenge was: **how to write tests?** How can someone keep track of python code to be tested under python code?
 
 For that, there's a directory `tests/samples` for python files that intentionally violates specific rules.
 
@@ -223,17 +223,17 @@ def test_verbose_reraise():
     assert_verbose(28, 12, second)  # <-- assert line, offset, expected violation
 ```
 
-After getting the first analyzer passing, I started following a TDD approach where I first created a file with the intended violation, then wrote the test, and finally implemented the passing code.
+After getting the first analyzer passing, I started following a TDD approach where I first create a file with the intended violation, then write the test, and finally implement the passing code.
 
 It's hard to test such stuff manually, so writing unit tests made me a lot more productive.
 
 ## 🧾 CLI and Configs
 
-Once the analyzers were set (and somewhat working) I had to make it usable, and linters fit well as a command line interface, so you can run it like: `tryceratops file.py` or maybe `tryceratops pydir`.
+Once the analyzers were set (and somewhat working) I had to make it usable, and linters fit well as a command-line interface, so you can run it like: `tryceratops file.py` or maybe `tryceratops pydir`.
 
 ### Using `click` as Python CLI
 
-[Click](https://click.palletsprojects.com/) is a simple framework to wrap your python code around a command line interface quickly. It's as simple as wrapping your function with a few decorators, see:
+[Click](https://click.palletsprojects.com/) is a simple framework to wrap your python code around a command-line interface quickly. It's as simple as wrapping your function with a few decorators, see:
 
 ```py
 EXPERIMENTAL_FLAG_OPTION = dict(is_flag=True, help="Whether to enable experimental analyzers.")
@@ -262,17 +262,17 @@ if __name__ == "__main__":
     main()
 ```
 
-Once I set some decorators like `@click.option` I had to receive and manage specific arguments which reflects the options I defined.
+Once I set some decorators like `@click.option` I had to receive and manage specific arguments which reflect the options I defined.
 It's indeed simple. The annoying part was to figure out how to use some options (the documentation is not clear).
 
 It took me a while to find out:
 
 - `is_flag` should be used instead of a boolean option.
-- if you want to allow multiple arguments you have to set different attributes. `nargs=-1` for the main argument and `multiple=True` for options. Not intuitive.
+- If you want to allow multiple arguments you have to set different attributes. `nargs=-1` for the main argument and `multiple=True` for options. Not intuitive.
 
 ### Supporting `pre-commit`
 
-I love [`pre-commit`](https://pre-commit.com/), it ensures that I'm not commiting some sort of code that will be a problem on CI, that I'm using all assigned vars, that all imports are in use, and that some other small improvements like end-of-line and trailing whitespace are clean. I wanted to promote the same feature for devs to benefit from this as well.
+I love [`pre-commit`](https://pre-commit.com/), it ensures that I'm not committing some sort of code that would be a problem on CI, that I'm using all assigned vars, that all imports are being used, and that some other small improvements like end-of-line and trailing whitespace are clean. I wanted to promote the same feature for devs to benefit from this as well.
 
 It's indeed very simple, I just had to create a file named: [`pre-commit-hooks.yaml`](https://github.com/guilatrova/tryceratops/blob/main/.pre-commit-hooks.yaml) with the following:
 
@@ -301,7 +301,13 @@ Easy! Now anyone can add a new pre-commit hook in their repo like:
 The next step would be to support [PEP518](https://www.python.org/dev/peps/pep-0518/) by allowing configs to be defined at the project level.
 Maybe you don't like some violation that I defined, that's fine, it shouldn't refrain you from benefiting from using Tryceratops.
 
-The goal is to support configs that someone would usually pass through CLI like:
+The goal is to support configs that someone would usually pass through CLI, so this:
+
+```bash
+tryceratops dir -x samples -i TC002 -i TC200 -i TC300 --experimental
+```
+
+can be represented by this:
 
 ```toml
 [tool.tryceratops]
@@ -310,7 +316,7 @@ ignore = ["TC002", "TC200", "TC300"]
 experimental = true
 ```
 
-Reading it was quite easy, there's a lib named `toml` that, guess what, reads and generates toml files.
+Reading the file was quite easy, there's a lib named `toml` that, guess what, reads and generates toml files.
 
 ```py
 import toml
@@ -376,16 +382,16 @@ def find_pyproject_toml(path_search_start: Tuple[str, ...]) -> Optional[str]:
         return str(path_pyproject_toml)
 ```
 
-It's a very great idea to check on `.git` or `pyproject.toml` itself to decide whether it's the project root and, obviously, it worked just fine.
+It's a very great idea to check on `.git` or `pyproject.toml` itself to decide whether it's the project root and it worked just fine.
 
 ## 📦 Publishing Package to Pypi with Flit
 
-Publishing to pypi is the fun part! Making it available and easy distributable for everyone so a dev can simply `pip install tryceratops` is as magic ✨ as runnning dinosaur commands 🦖 from your terminal.
-There's several distinct ways of publishing a package to Pypi, and [`flit`](https://flit.readthedocs.io/en/latest/) is the simplest one that I tried so far.
+Publishing to pypi is the fun part! Making it available and easy distributable for everyone so a dev can simply `pip install tryceratops` is as magic ✨ as running dinosaur commands 🦖 from your terminal.
+There're several distinct ways of publishing a package to Pypi, and [`flit`](https://flit.readthedocs.io/en/latest/) is the simplest one that I tried so far.
 
 I didn't have to care about creating a `setup.py` and [the docs](https://docs.python.org/3/distutils/setupscript.html) seemed too boring in comparison to the simplicity of writing a [config in pyproject](https://github.com/guilatrova/tryceratops/blob/c574aec/pyproject.toml#L5-L21).
 
-The only challenge is to (remember to) keep `requires` up to date. I released two versions already without the proper dependencies set so they're unusable 😝. Sadly Pypi doesn't allow me to overwrite previous published versions with a new package.
+The only challenge is to (remember to) keep `requires` up to date. I released two versions already without the proper dependencies set so they're unusable 😝. Sadly Pypi doesn't allow me to overwrite older published versions with a new package.
 
 ## 🛣 Roadmap and Plans
 
@@ -395,32 +401,32 @@ I would say the next steps are:
 
 Is it really useful? Does it really work? Is there any hidden bug?
 
-Such questions I can only find out by using more and more the tool.
+Such questions I can only find out by using the tool more and more.
 
-It's hard to promote something that is stil beta, hopefully I'll figure this out as I keep working on it.
+It's hard to promote something that is still beta, hopefully, I'll figure this out as I keep working on it.
 
 **Please, let me know if you/your company found it useful, I'd be flattered to add your project to the main README as a "Tryceratops Supporter" 🦖🏆 !**
 
-**Critics and feedback are ALWAYS welcome, tell me if you hate it! I swear I won't cry too much 🥲.**
+**Critics and feedback are ALWAYS welcome, tell me if you hate it! I swear I won't cry 🥲.**
 
 ### 🚀 Implement CI/CD
 
-So far the release process is very manual! It requires me to run `flit`, update readme with new version, create a release on GitHub (for pre-commit), and I can't ensure tests are still passing.
+So far the release process is very manual! It requires me to run `flit`, update readme with the new version, create a release on GitHub (for pre-commit), and I can't ensure tests are still passing.
 
 I started the project following [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) which is the perfect match of [semantic relase](https://python-semantic-release.readthedocs.io/en/latest/) to automate versioning + generate changelogs + releases. I hope I can find the time to implement it someday later in the future.
 
 ### 🚧 Extend violations and analyzers with more scenarios
 
-I need more scenarios! Yes, it's hard to create situations! For example, I realized that `TC003` is raised for: `raise Exception("long message")` but not for `raise module.Exception("long message")`. I totally need to find edge cases and make this tool robust, otherwise it fails by not providing the expected value.
+I need more scenarios! Yes, it's hard to create situations! For example, I realized that `TC003` is raised for: `raise Exception("long message")` but not for `raise module.Exception("long message")`. I need to find edge cases and make this tool robust, otherwise, it fails by not providing the expected value.
 
 Besides this, I believe there's still value in adding a few more violations for the `logging` usage within `except` blocks (which I don't think people usually know how to use properly, for example, do you know the difference between `logging.error` and `logging.exception`?).
 
-I'm tracking planning and progress in the [GitHub project](https://github.com/guilatrova/tryceratops/projects/1) so anyone can check out.
+I'm tracking planning and progress on the [GitHub project](https://github.com/guilatrova/tryceratops/projects/1) so anyone can check out.
 
 ### Credits
 
-I must thank to God for the inspiration 🙌 , I believe He is my source of creativity.
+I must thank God for the inspiration 🙌 , I believe He is my source of creativity.
 
-Logo icon was made by [https://www.freepik.com](Freepik).
+The logo icon was made by [https://www.freepik.com](Freepik).
 
-The [black](https://github.com/psf/black) project for insights, inspiration, and specially for the `pyproject.toml` project root code.
+The [black](https://github.com/psf/black) project for insights, inspiration, and especially for the `pyproject.toml` project root code.
