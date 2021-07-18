@@ -24,7 +24,7 @@ Next, consider the **left to right flow**. That's the exception handling path (`
 The production code for this function is exactly as follows:
 
 ```py
-# Good sample
+# Good example
 class OnfleetService:
     def create_tasks(self, order: Order) -> dict:
         try:
@@ -73,7 +73,7 @@ For all the cases we `raise` again because this service layer is not responsible
 It would be hard and probably useless to have very specific exceptions (precision):
 
 ```py
-# Bad sample
+# Bad example
 class OnfleetService:
     def create_tasks(self, order: Order) -> dict:
         try:
@@ -100,13 +100,92 @@ class OnfleetService:
         ...
 ```
 
-##
+Also, they don't even matter. If any of these exceptions are raised, your team needs to investigate it anyway, and I hope they look at the stack trace to find details and figure out root causes.
 
-
+After all, it's impossible to be prepared for everything. Maybe the database config is wrong, maybe the env variable is not set, etc.
 
 ## When to create?
 
+Given that you understand what an exception is and represents, you might feel like it's simple to create them now.
+
+Sometimes is not that clear though. The Effective Python book on Chapter 2 Item 14 [**Prefer exceptions to returning None**](https://github.com/SigmaQuan/Better-Python-59-Ways/blob/master/item_14_prefer_exceptions.py) for example.
+
+I recommend going beyond that.
+
+If you're constantly checking whether "to proceed" or not, that's probably a good candidate for an exception. The code you saw above could not have any exception and instead be like:
+
+```py
+# Bad example
+class OnfleetService:
+    def create_tasks(self, order: Order) -> Optional[dict]:
+        has_duplicities = self._prevent_tasks_duplicities(order.id)
+
+        if has_duplicities:  # May I continue? (1)
+            return None
+
+        pickup_task_payload = self._create_pick_up_payload(order)
+        if not pickup_task_payload:  # May I continue? (2)
+            return None
+
+        pick_up_task = self._create_pick_up_payload(order)
+        if pick_up_task:  # May I continue? (3)
+            drop_off_task_payload = self._create_drop_off_payload(order, pick_up_task)
+
+            if not drop_off_task_payload:  # May I continue? (4)
+                self._delete_task(pick_up_task)
+                return None
+
+            drop_off_task = _create_drop_off_task()
+            if not drop_off_task_payload:  # May I continue? (5)
+                self._delete_task(pick_up_task)
+                return None
+
+            logger.info("Tasks were created and stored successfully")
+
+            return {
+                "pick_up_task": pick_up_task,
+                "drop_off_task": drop_off_task,
+            }
+```
+
+I assure you this code would work with some "feature losses". The caller now has no visiblity of "what went wrong" since it just receives a `None` stating nothing happened (plus needs one more check `if tasks:`), furthermore you lose valuable stacktrace that can point out the line, file and deeper context for the issue you had.
+
+I would like to humbly create a principle for that. Somewhat inspired by the [Tell, Don't Ask](https://martinfowler.com/bliki/TellDontAsk.html) principle.
+
+I'd like to refer to this as **Trigger, Don't Confirm**.
+
+### Principle: Trigger, Don't Confirm
+
+**Good** (Respects principle)
+
+Represents any time that you can trust a function will either return the result or raise an exception.
+
+e.g.
+
+```py
+try:
+    result = maybe_will_work()
+    keep_flow(result)  # <-- Respects principle, no checks
+except WorkFailed:
+    ...
+```
+
+**Bad** (Breaks principle)
+
+Represents any time that you give a command (e.g. invokes a method), but you're required to check whether the result is intended to continue your flow.
+
+e.g.
+
+```py
+result = maybe_will_work()
+if result:  # <-- Breaks principle
+    keep_flow(result)
+```
+
 ## How to structure them
+
+You might have noticed that we are able to extract data form the e
+
 
 ## Real-life examples
 
