@@ -251,7 +251,7 @@ In general, an unknown error is very serious and requires an immediate response 
 
 #### Handle exceptions by category:
 
-You can have different response to different group of issues:
+You can have different responses to different groups of issues:
 
 ```py
 try:
@@ -262,7 +262,7 @@ except OnfleetApiFailed as error:
     alert_support_team(f"A request to '{error.endpoint}' failed with {error.status_code} status code")
 ```
 
-We can trigger different alerts based on the group of issue. For this case you got: Database or API groups.
+We can trigger different alerts based on the group. For this case, you got: Database or API groups.
 
 ### 🏷️ Exceptions are beyond messages, they provide context
 
@@ -306,7 +306,7 @@ class OnfleetApiFailed(APIException, OnfleetTasksException):  # <-- Inherit from
 
 You keep your original grouping (belongs to your system API exception), and allows the framework (DRF in this case) to handle it.
 
-![exception different groups](exception-groups.png)
+![Exception different groups](exception-groups.png)
 
 You don't need to be restrained by the framework you use. You can create your own set of "Authorization", "UserManualAction", "UserFriendly" exceptions and treat them as such regardless of specific details.
 
