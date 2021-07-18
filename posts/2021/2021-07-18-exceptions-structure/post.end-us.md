@@ -366,8 +366,10 @@ Django is very interesting because it allows you to identify a [**specific model
 
 [**SQLAlchemy**](https://github.com/sqlalchemy/sqlalchemy) is a bit different, but also has a similar structure. It splits exceptions into [core](https://docs.sqlalchemy.org/en/14/core/exceptions.html) and [ORM](https://docs.sqlalchemy.org/en/14/orm/exceptions.html), and most exceptions inherit from the base (not dummy though) `SQLAlchemyError`.
 
-## Real-life examples
+## 💓 Do you love real-life examples?
 
-## Extending and categorizing
+If you're like me and prefer **real-life examples** like the above **I have something for you**. I take most of my examples from my daily work, and they're very close to the real code, except by critical or private data for obvious (and contractual) reasons.
 
-## Where to keep them
+If you enjoy such examples, you might want to follow me on [Twitter](https://twitter.com/guilatrova/), where I share several tips and real-life code that doesn't fit in a blog post format. Here, take an example:
+
+https://twitter.com/guilatrova/status/1416229315038044160
