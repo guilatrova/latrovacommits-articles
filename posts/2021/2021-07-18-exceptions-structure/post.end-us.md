@@ -188,7 +188,7 @@ if result:  # <-- Breaks principle
 
 The Effective Python book on Chapter 7 Item 51 suggests ["**Define a root exception to insulate callers from APIs**"](https://github.com/SigmaQuan/Better-Python-59-Ways/blob/master/item_51_define_a_root_exception.py), which means in my humble opinion "categorizing" your exceptions.
 
-### Extending and categorizing
+### Categorizing
 
 Always start with a base exception for a specific "module" or domain. It basically means having a dummy base and keep extending it.
 
@@ -287,6 +287,54 @@ except OnfleetApiFailed as error:
 ```
 
 Always ask yourself: "If this exception is raised, what do I need to to know to keep investigating, or to prevent the issue from getting worse?"
+
+### Combine exceptions
+
+example: Django API exceptions
+
+### Where to place exceptions
+
+Keep exceptions in the same modules that raise them. Often you want to put a "generic group exception" at a top level and more specific ones close to a logical module.
+
+Example:
+
+```
+┌─ src/
+│  ├─ core
+│  │  ├─ __init__.py
+│  │  ├─ settings.py
+│  │  └─ exceptions.py  # <-- Base for all defined exceptions
+│  │
+│  ├─ api
+│  │  ├─ __init__.py
+│  │  ├─ onfleet.py
+│  │  └─ exceptions.py  # <-- API exceptions
+│  │
+│  └─ models
+│     ├─ __init__.py
+│     ├─ tasks.py
+│     └─ exceptions.py  # <-- Model exceptions
+│
+├─ README.md
+└─ requirements.txt
+```
+
+This makes imports clear:
+
+```py
+from models import tasks, exceptions  # Obvious because it comes from 'models'
+from api.exceptions import OnfleetApiFailed  # Also clear and expected
+```
+
+#### How it compare to other libs
+
+[**Django**](https://docs.djangoproject.com/en/3.2/ref/exceptions/) also splits exceptions by "modules":
+
+![django exceptions tree](django-exceptions.png)
+
+Django is very interesting because it allows you to identify a [**specific model** that does not exists](https://docs.djangoproject.com/en/3.2/ref/models/class/#doesnotexist).
+
+[**SQLAlchemy**](https://github.com/sqlalchemy/sqlalchemy) is a bit different, but also has a similar structure. It splits exceptions into [core](https://docs.sqlalchemy.org/en/14/core/exceptions.html) and [ORM](https://docs.sqlalchemy.org/en/14/orm/exceptions.html), and most exceptions inherit from the base (not dummy though) `SQLAlchemyError`.
 
 ## Real-life examples
 
