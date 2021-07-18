@@ -190,9 +190,9 @@ The [Effective Python book on Chapter 7 Item 51](https://amzn.to/3bEVHpG) sugges
 
 ### 🔖 Categorizing
 
-Always start with a base exception for a specific "module" or domain. It basically means having a dummy base and keep extending it.
+Always start with a base exception for a specific "module" or domain. It means having a (maybe) dummy base and keep extending it.
 
-Here's more real-world examples:
+Here are more real-world examples:
 
 ```py
 # Dummy category
@@ -232,11 +232,11 @@ class StoreDropOffTaskFailed(StoreTaskFailed):
         super().__init__(message)
 ```
 
-This structure allows you to either isolate known from unknown, and to handle them by category:
+This structure allows you to either isolate known from unknown and to handle them by category:
 
 #### Isolate known exceptions from unknown:
 
-By doing that you can trigger differents kinds of alarms:
+By doing that you can trigger different kinds of alarms:
 
 ```py
 try:
@@ -247,7 +247,7 @@ except Exception:
     logger.critical("Something UNEXPECTED happened", exc_info=True)
 ```
 
-In general, an unknown error is very serious and requires immediate response because it means that for sure your software can't heal itself.
+In general, an unknown error is very serious and requires an immediate response because it means that for sure your software can't heal itself.
 
 #### Handle exceptions by category:
 
@@ -266,9 +266,9 @@ We can trigger different alerts based on the group of issue. For this case you g
 
 ### 🏷️ Exceptions are beyond messages, they provide context
 
-Ensure that the exception you're creating can give you context. "Request failed" is too shallow - what request? what endpoint? what response we got?
+Ensure that the exception you're creating can give you context. "Request failed" is too shallow - what request? what endpoint? what response did we get?
 
-You might have noticed that we are able to extract relevant data from exceptions to handle issues, like:
+You might have noticed that we can extract relevant data from exceptions to handle issues, like:
 
 ```py
 try:
@@ -286,7 +286,7 @@ except OnfleetApiFailed as error:
     alert_support_team(f"A request to '{error.endpoint}' failed with {error.status_code} status code")  # <-- Extract endpoint/status code
 ```
 
-Always ask yourself: "If this exception is raised, what do I need to to know to keep investigating, or to prevent the issue from getting worse?"
+Always ask yourself: "If this exception is raised, what do I need to know to keep investigating, or to prevent the issue from getting worse?"
 
 ### ↔️ Combine exceptions
 
@@ -318,13 +318,13 @@ try:
 except UserManualAction as error:
     # Several exceptions in this system may require users to take some manual steps.
     # Such group supports 'email_body' and 'send_to' fields.
-    # For those group, send an email to notify them.
+    # For those groups, send an email to notify them.
     send_email(error.email_body, error.send_to)
 ```
 
 ### 📥 Where to place exceptions
 
-Keep exceptions in the same modules that raise them. Often you want to put a "generic group exception" at a top level and more specific ones close to a logical module.
+Keep exceptions in the same modules that raise them. Often you want to put a "generic group exception" at top-level and more specific ones close to a logical module.
 
 Example:
 
@@ -356,7 +356,7 @@ from models import tasks, exceptions  # Obvious because it comes from 'models'
 from api.exceptions import OnfleetApiFailed  # Also clear and expected
 ```
 
-#### How it compare to other libs
+#### How it compares to other libs
 
 [**Django**](https://docs.djangoproject.com/en/3.2/ref/exceptions/) also splits exceptions by "modules":
 
