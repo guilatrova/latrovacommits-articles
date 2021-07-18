@@ -10,12 +10,12 @@ You frequently **don't care about precision, but accuracy**. It means that you d
 
 I'll start sharing a real-life example. Let me explain the boring business part quickly: Back when I worked at [Mimic](https://latamlist.com/2019/12/15/brazilian-food-delivery-startup-mimic-receives-9m-seed-round/) we used a third-party API named [Onfleet](https://onfleet.com/) to assign orders to couriers. At that time we decided to break it down into two steps:
 
-1. Create a pick-up task (courier taking the order),
+1. Create a pick-up task (courier takes the order from the restaurant),
 2. Create a drop-off task (courier takes the order to the customer).
 
 Different API calls are made, and the latter depends on the first. Anything might go wrong, and if it does we need to **UNDO** anything we've done previously.
 
-Please note the **straight flow from top to bottom**. That's the success path (`try` and `else` block) that may raise exceptions.
+Please note the **straight flow from top to bottom**. That's the success path (`try` and `else` blocks) that may raise exceptions.
 
 Next, consider the **left to right flow**. That's the exception handling path (`except` blocks) that also can raise exceptions.
 
@@ -64,6 +64,8 @@ We (and you shouldn't either) don't care whether the function failed because of 
 
 Instead, my code must REACT to WHAT happens:
 
+#  FIX PICK UP PICKUP PICK-UP
+
 - If I can't save the pickup task in my database (for any reason), I need to send a `DELETE` request to remove it from the third-party (otherwise they have a task that our microservice doesn't know about);
 - If I can't create the drop off task on their API (for any reason), I need to repeat the same flow above;
 - If I can't save the drop off task in my database (for any reason), I need to repeat the same flow above + send another `DELETE` request to remove the drop off as well;
@@ -102,13 +104,13 @@ class OnfleetService:
 
 Also, they don't even matter. If any of these exceptions are raised, your team needs to investigate it anyway, and I hope they look at the stack trace to find details and figure out root causes.
 
-After all, it's impossible to be prepared for everything. Maybe the database config is wrong, maybe the env variable is not set, etc.
+After all, it's impossible to be prepared for everything. Maybe the database config is wrong, maybe the env variable is not set, you never know!
 
 ## 🏗️ When to create?
 
 Given that you understand what an exception is and represents, you might feel like it's simple to create them now.
 
-Sometimes is not that clear though. The [Effective Python book on Chapter 2 Item 14](https://amzn.to/3bEVHpG) ["**Prefer exceptions to returning None**"](https://github.com/SigmaQuan/Better-Python-59-Ways/blob/master/item_14_prefer_exceptions.py) for example.
+Sometimes it's not that clear though. The [Effective Python book on Chapter 2 Item 14](https://amzn.to/3bEVHpG) recommends ["**Prefer exceptions to returning None**"](https://github.com/SigmaQuan/Better-Python-59-Ways/blob/master/item_14_prefer_exceptions.py) for example.
 
 I recommend going beyond that.
 
@@ -203,7 +205,7 @@ class OnfleetTasksException(Exception):
 # Base group category
 class StoreTaskFailed(OnfleetTasksException):
     def __init__(self):
-        message = "Storing task at the database error"  # Defines default message that can be overwritten
+        message = "Storing task into database error"  # Defines default message that can be overwritten
         super().__init__(message)
 
 
@@ -247,7 +249,7 @@ except Exception:
     logger.critical("Something UNEXPECTED happened", exc_info=True)
 ```
 
-In general, an unknown error is very serious and requires an immediate response because it means that for sure your software can't heal itself.
+In general, an unknown error is by default very serious and requires an immediate response because it means that for sure your software can't heal itself.
 
 #### Handle exceptions by category:
 
@@ -290,23 +292,23 @@ Always ask yourself: "If this exception is raised, what do I need to know to kee
 
 ### ↔️ Combine exceptions
 
-By having specific exceptions you can also combine them with more thanks to Python's support to multiple inheritance.
+By having specific exceptions you can also combine them with others thanks to Python's support to multiple inheritance.
 
 For example, in [Django](https://github.com/django/django) with [Django Rest Framework](https://www.django-rest-framework.org/), If you wish to raise a specific exception with a custom message, but also trigger a `503` status code you can inherit from [`APIException`](https://www.django-rest-framework.org/api-guide/exceptions/#apiexception):
 
 ```py
-class OnfleetApiFailed(APIException, OnfleetTasksException):  # <-- Inherit from 2 instances, belongs to 2 groups
+class OnfleetApiFailed(APIException, OnfleetTasksException):  # <-- Inherit from 2 classes, belongs to 2 groups
     status_code = 503  # <-- property used by API Exception
     default_detail = 'Onfleet temporarily unavailable, try again later.'  # <-- property used by API Exception
     default_code = 'service_unavailable'  # <-- property used by API Exception
 
     def __init__(self, endpoint, onfleet_response_status_code):
-        ...
+        ...  # <-- My custom implementation
 ```
 
 You keep your original grouping (belongs to your system API exception), and allows the framework (DRF in this case) to handle it.
 
-![Exception different groups](exception-groups.png)
+![Exceptions in multiple groups](exception-groups.png)
 
 You don't need to be restrained by the framework you use. You can create your own set of "Authorization", "UserManualAction", "UserFriendly" exceptions and treat them as such regardless of specific details.
 
@@ -324,7 +326,7 @@ except UserManualAction as error:
 
 ### 📥 Where to place exceptions
 
-Keep exceptions in the same modules that raise them. Often you want to put a "generic group exception" at top-level and more specific ones close to a logical module.
+Keep exceptions in the same modules that raise them. Often you want to put a "generic group exception" at the top-level and more specific ones close to the logical module.
 
 Example:
 
@@ -360,7 +362,7 @@ from api.exceptions import OnfleetApiFailed  # Also clear and expected
 
 [**Django**](https://docs.djangoproject.com/en/3.2/ref/exceptions/) also splits exceptions by "modules":
 
-![django exceptions tree](django-exceptions.png)
+![Django exceptions modules](django-exceptions.png)
 
 Django is very interesting because it allows you to identify a [**specific model** that does not exist](https://docs.djangoproject.com/en/3.2/ref/models/class/#doesnotexist).
 
