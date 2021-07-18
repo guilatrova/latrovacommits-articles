@@ -64,11 +64,9 @@ We (and you shouldn't either) don't care whether the function failed because of 
 
 Instead, my code must REACT to WHAT happens:
 
-#  FIX PICK UP PICKUP PICK-UP
-
-- If I can't save the pickup task in my database (for any reason), I need to send a `DELETE` request to remove it from the third-party (otherwise they have a task that our microservice doesn't know about);
-- If I can't create the drop off task on their API (for any reason), I need to repeat the same flow above;
-- If I can't save the drop off task in my database (for any reason), I need to repeat the same flow above + send another `DELETE` request to remove the drop off as well;
+- If I can't save the pick-up task in my database (for any reason), I need to send a `DELETE` request to remove it from the third-party (otherwise they have a task that our microservice doesn't know about);
+- If I can't create the drop-off task on their API (for any reason), I need to repeat the same flow above;
+- If I can't save the drop-off task in my database (for any reason), I need to repeat the same flow above + send another `DELETE` request to remove the drop-off as well;
 
 For all the cases we `raise` again because this service layer is not responsible for logging, alarming, or presenting the user a better UI, it's just responsible for mitigating risks to the operation (e.g. Prevent couriers from picking an order without a drop-off, or triggering events we're never able to forward to the end-user like: "the courier is on its way to deliver your order").
 
@@ -213,9 +211,9 @@ class StoreTaskFailed(OnfleetTasksException):
 class StorePickUpTaskFailed(StoreTaskFailed):
     def __init__(self, order_id, pick_up_id):
         message = (  # Sets specific message intended for engineers to debug
-            "An error occurred while storing pickup task info into the database\n"
+            "An error occurred while storing pick-up task info into the database\n"
             f"Order ID: {order_id}\n"
-            f"Pickup task ID: {pick_up_id}"
+            f"Pick-up task ID: {pick_up_id}"
         )
         self.pick_up_task_id = pick_up_id  # Sets context
         super().__init__(message)
@@ -225,10 +223,10 @@ class StorePickUpTaskFailed(StoreTaskFailed):
 class StoreDropOffTaskFailed(StoreTaskFailed):
     def __init__(self, order_id, pick_up_id, drop_off_id):
         message = (  # Sets specific message intended for engineers to debug
-            "An error occurred while storing drop off task info into the database\n"
+            "An error occurred while storing drop-off task info into the database\n"
             f"Order ID: {order_id}\n"
-            f"Pickup task ID: {pick_up_id}\n"
-            f"Dropoff task ID: {drop_off_id}"
+            f"Pick-up task ID: {pick_up_id}\n"
+            f"Drop-off task ID: {drop_off_id}"
         )
         self.drop_off_task_id = drop_off_id  # Sets context
         super().__init__(message)
