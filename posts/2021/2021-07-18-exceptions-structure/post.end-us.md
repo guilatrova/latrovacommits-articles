@@ -15,6 +15,8 @@ I'll start sharing a real-life example. Let me explain the boring bussiness part
 
 Different API calls are made, and the latter depends on the first. Anything might go wrong, and if it does we need to **UNDO** anything we've done previously.
 
+
+
 Focus on having:
 
 ```py
@@ -42,6 +44,15 @@ class OnfleetService:
                 "pick_up_task": pick_up_task,
                 "drop_off_task": drop_off_task,
             }
+
+
+def handle_incoming_orders(orders: Iterable[Order]):
+    for order in orders:
+        try:
+            logger.debug(f"Received order: {order}")
+            onfleet_service.create_tasks(order)
+        except exceptions.TasksAlreadyExists:
+            pass
 ```
 
 Rather:
