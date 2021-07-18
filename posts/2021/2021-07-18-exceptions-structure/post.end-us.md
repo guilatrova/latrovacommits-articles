@@ -296,15 +296,31 @@ For example, in [Django](https://github.com/django/django) with [Django Rest Fra
 
 ```py
 class OnfleetApiFailed(APIException, OnfleetTasksException):  # <-- Inherit from 2 instances, belongs to 2 groups
-    status_code = 503
-    default_detail = 'Onfleet temporarily unavailable, try again later.'
-    default_code = 'service_unavailable'
+    status_code = 503  # <-- property used by API Exception
+    default_detail = 'Onfleet temporarily unavailable, try again later.'  # <-- property used by API Exception
+    default_code = 'service_unavailable'  # <-- property used by API Exception
 
     def __init__(self, endpoint, onfleet_response_status_code):
         ...
 ```
 
 You keep your original grouping (belongs to your system API exception), and allows the framework (DRF in this case) to handle it.
+
+![exception different groups](exception-groups.png)
+
+You don't need to be restrained by the framework you use. You can create your own set of "Authorization", "UserManualAction", "UserFriendly" exceptions and treat them as such regardless of specific details.
+
+And then you can:
+
+```py
+try:
+    do_work()
+except UserManualAction as error:
+    # Several exceptions in this system may require users to take some manual steps.
+    # Such group supports 'email_body' and 'send_to' fields.
+    # For those group, send an email to notify them.
+    send_email(error.email_body, error.send_to)
+```
 
 ### Where to place exceptions
 
