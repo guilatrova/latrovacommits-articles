@@ -2,7 +2,7 @@
 
 Given now you know how to properly [handle your exceptions](https://blog.guilatrova.dev/handling-exceptions-in-python-like-a-pro/) with [Tryceratops 🦖](https://blog.guilatrova.dev/project-tryceratops/) help, the next step is to structure them effectivelly so you can scale and reuse.
 
-## What exceptions should represent?
+## 🖼️ What exceptions should represent?
 
 To make it short, exceptions represent: *"SOMETHING EXPECTED happened"*.
 
@@ -104,7 +104,7 @@ Also, they don't even matter. If any of these exceptions are raised, your team n
 
 After all, it's impossible to be prepared for everything. Maybe the database config is wrong, maybe the env variable is not set, etc.
 
-## When to create?
+## 🏗️ When to create?
 
 Given that you understand what an exception is and represents, you might feel like it's simple to create them now.
 
@@ -154,7 +154,7 @@ I would like to humbly create a principle for that. Somewhat inspired by the [Te
 
 I'd like to refer to this as **Trigger, Don't Confirm**.
 
-### Principle: Trigger, Don't Confirm
+### 🔫 Principle: Trigger, Don't Confirm
 
 Try to follow this principle whenever you break it (at least) twice in any function or method. I state it as follows:
 
@@ -184,11 +184,11 @@ if result:  # <-- Breaks principle
     keep_flow(result)
 ```
 
-## How to structure exceptions
+## 🦴 Exceptions structure
 
 The Effective Python book on Chapter 7 Item 51 suggests ["**Define a root exception to insulate callers from APIs**"](https://github.com/SigmaQuan/Better-Python-59-Ways/blob/master/item_51_define_a_root_exception.py), which means in my humble opinion "categorizing" your exceptions.
 
-### Categorizing
+### 🔖 Categorizing
 
 Always start with a base exception for a specific "module" or domain. It basically means having a dummy base and keep extending it.
 
@@ -264,7 +264,7 @@ except OnfleetApiFailed as error:
 
 We can trigger different alerts based on the group of issue. For this case you got: Database or API groups.
 
-### Exceptions are beyond messages, they provide context
+### 🏷️ Exceptions are beyond messages, they provide context
 
 Ensure that the exception you're creating can give you context. "Request failed" is too shallow - what request? what endpoint? what response we got?
 
@@ -288,7 +288,7 @@ except OnfleetApiFailed as error:
 
 Always ask yourself: "If this exception is raised, what do I need to to know to keep investigating, or to prevent the issue from getting worse?"
 
-### Combine exceptions
+### ↔️ Combine exceptions
 
 By having specific exceptions you can also combine them with more thanks to Python's support to multiple inheritance.
 
@@ -322,7 +322,7 @@ except UserManualAction as error:
     send_email(error.email_body, error.send_to)
 ```
 
-### Where to place exceptions
+### 📥 Where to place exceptions
 
 Keep exceptions in the same modules that raise them. Often you want to put a "generic group exception" at a top level and more specific ones close to a logical module.
 
@@ -368,7 +368,7 @@ Django is very interesting because it allows you to identify a [**specific model
 
 ## 💓 Do you love real-life examples?
 
-If you're like me and prefer **real-life examples** like the above **I have something for you**. I take most of my examples from my daily work, and they're very close to the real code, except by critical or private data for obvious (and contractual) reasons.
+If you're like me and prefer **real-world examples** like the above **I have something for you**. I take most of my examples from my daily work, and they're very close to the real code, except by critical or private data for obvious (and contractual) reasons.
 
 If you enjoy such examples, you might want to follow me on [Twitter](https://twitter.com/guilatrova/), where I share several tips and real-life code that doesn't fit in a blog post format. Here, take an example:
 
