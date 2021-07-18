@@ -108,7 +108,7 @@ After all, it's impossible to be prepared for everything. Maybe the database con
 
 Given that you understand what an exception is and represents, you might feel like it's simple to create them now.
 
-Sometimes is not that clear though. The Effective Python book on Chapter 2 Item 14 ["**Prefer exceptions to returning None**"](https://github.com/SigmaQuan/Better-Python-59-Ways/blob/master/item_14_prefer_exceptions.py) for example.
+Sometimes is not that clear though. The [Effective Python book on Chapter 2 Item 14](https://amzn.to/3bEVHpG) ["**Prefer exceptions to returning None**"](https://github.com/SigmaQuan/Better-Python-59-Ways/blob/master/item_14_prefer_exceptions.py) for example.
 
 I recommend going beyond that.
 
@@ -186,7 +186,7 @@ if result:  # <-- Breaks principle
 
 ## 🦴 Exceptions structure
 
-The Effective Python book on Chapter 7 Item 51 suggests ["**Define a root exception to insulate callers from APIs**"](https://github.com/SigmaQuan/Better-Python-59-Ways/blob/master/item_51_define_a_root_exception.py), which means in my humble opinion "categorizing" your exceptions.
+The [Effective Python book on Chapter 7 Item 51](https://amzn.to/3bEVHpG) suggests ["**Define a root exception to insulate callers from APIs**"](https://github.com/SigmaQuan/Better-Python-59-Ways/blob/master/item_51_define_a_root_exception.py), which means in my humble opinion "categorizing" your exceptions.
 
 ### 🔖 Categorizing
 
