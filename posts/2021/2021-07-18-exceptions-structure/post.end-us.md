@@ -1,14 +1,14 @@
 # How to structure exception in Python like a PRO 🐍 🏗️ 💣
 
-Given now you know how to properly [handle your exceptions](https://blog.guilatrova.dev/handling-exceptions-in-python-like-a-pro/) with [Tryceratops 🦖](https://blog.guilatrova.dev/project-tryceratops/) help, the next step is to structure them effectivelly so you can scale and reuse.
+Given now you know how to properly [handle your exceptions](https://blog.guilatrova.dev/handling-exceptions-in-python-like-a-pro/) with [Tryceratops 🦖](https://blog.guilatrova.dev/project-tryceratops/) help, the next step is to structure them effectively so you can scale and reuse them.
 
 ## 🖼️ What exceptions should represent?
 
 To make it short, exceptions represent: *"SOMETHING EXPECTED happened"*.
 
-You frequently **don't care about precision, but accuracy**. It means that you don't need to know exactly WHY something failed (e.g. bad internet connection? provider is off?), but you should focus on **WHAT failed so you can respond to**.
+You frequently **don't care about precision, but accuracy**. It means that you don't need to know exactly WHY something failed (e.g. bad internet connection? provider is off?), but you should focus on **WHAT failed so you can respond to it**.
 
-I'll start sharing a real-life example. Let me explain the boring bussiness part quick: Back when I worked at [Mimic](https://latamlist.com/2019/12/15/brazilian-food-delivery-startup-mimic-receives-9m-seed-round/) we used a third-party API named [Onfleet](https://onfleet.com/) to assign orders to couriers. At that time we decided to break it down into two steps:
+I'll start sharing a real-life example. Let me explain the boring business part quickly: Back when I worked at [Mimic](https://latamlist.com/2019/12/15/brazilian-food-delivery-startup-mimic-receives-9m-seed-round/) we used a third-party API named [Onfleet](https://onfleet.com/) to assign orders to couriers. At that time we decided to break it down into two steps:
 
 1. Create a pick-up task (courier taking the order),
 2. Create a drop-off task (courier takes the order to the customer).
@@ -60,15 +60,15 @@ def handle_incoming_orders(orders: Iterable[Order]):
 ```
 
 Note how **we focus on the "WHAT":** `StorePickupTaskFailed`, `CreateDropOffTaskFailed`, `StoreDropOffTaskFailed`.
-We (and you shouldn't either) don't care whether the function failed because of bad `json` syntax, or their API replied with 400, or the database was unavailable at the moment, or an invalid foreign key issue happened. **All this information will be contained and logged in the strack trace already!**
+We (and you shouldn't either) don't care whether the function failed because of bad `JSON` syntax, or their API replied with 400, or the database was unavailable at the moment, or an invalid foreign key issue happened. **All this information will be contained and logged in the stack trace already!**
 
 Instead, my code must REACT to WHAT happens:
 
-- If I can't save the pick up task in my database (for any reason), I need to send a `DELETE` request to remove it from the third-party (otherwise they have a task that our microservice doesn't know about);
+- If I can't save the pickup task in my database (for any reason), I need to send a `DELETE` request to remove it from the third-party (otherwise they have a task that our microservice doesn't know about);
 - If I can't create the drop off task on their API (for any reason), I need to repeat the same flow above;
 - If I can't save the drop off task in my database (for any reason), I need to repeat the same flow above + send another `DELETE` request to remove the drop off as well;
 
-For all the cases we `raise` again because this service layer is not responsible for logging, alarming, or presenting the user a better UI, it's just responsible for mitigating risks to the operation (e.g. Prevent couriers from picking an order without a drop off, or trigerring events we're never able to forward to the end user like: "the courier is on its way to deliver your order").
+For all the cases we `raise` again because this service layer is not responsible for logging, alarming, or presenting the user a better UI, it's just responsible for mitigating risks to the operation (e.g. Prevent couriers from picking an order without a drop-off, or triggering events we're never able to forward to the end-user like: "the courier is on its way to deliver your order").
 
 It would be hard and probably useless to have very specific exceptions (precision):
 
@@ -108,7 +108,7 @@ After all, it's impossible to be prepared for everything. Maybe the database con
 
 Given that you understand what an exception is and represents, you might feel like it's simple to create them now.
 
-Sometimes is not that clear though. The Effective Python book on Chapter 2 Item 14 [**Prefer exceptions to returning None**](https://github.com/SigmaQuan/Better-Python-59-Ways/blob/master/item_14_prefer_exceptions.py) for example.
+Sometimes is not that clear though. The Effective Python book on Chapter 2 Item 14 ["**Prefer exceptions to returning None**"](https://github.com/SigmaQuan/Better-Python-59-Ways/blob/master/item_14_prefer_exceptions.py) for example.
 
 I recommend going beyond that.
 
@@ -148,7 +148,7 @@ class OnfleetService:
             }
 ```
 
-I assure you this code would work with some "feature losses". The caller now has no visiblity of "what went wrong" since it just receives a `None` stating nothing happened (plus needs one more check `if tasks:`), furthermore you lose valuable stacktrace that can point out the line, file and deeper context for the issue you had.
+I assure you this code would work with some "feature losses". The caller now has no visibility of "what went wrong" since it just receives a `None` stating nothing happened (plus needs one more check `if tasks:`), furthermore you lose valuable stack trace that can point out the line, file, and deeper context for the issue you had.
 
 I would like to humbly create a principle for that. Somewhat inspired by the [Tell, Don't Ask](https://martinfowler.com/bliki/TellDontAsk.html) principle.
 
