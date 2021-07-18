@@ -156,9 +156,11 @@ I'd like to refer to this as **Trigger, Don't Confirm**.
 
 ### Principle: Trigger, Don't Confirm
 
+Try to follow this principle whenever you break it (at least) twice in any function or method. I state it as follows:
+
 **Good** (Respects principle)
 
-Represents any time that you can trust a function will either return the result or raise an exception.
+Represents any moment where you can trust a function will either return the result or raise an exception.
 
 e.g.
 
@@ -172,7 +174,7 @@ except WorkFailed:
 
 **Bad** (Breaks principle)
 
-Represents any time that you give a command (e.g. invokes a method), but you're required to check whether the result is intended to continue your flow.
+Represents any time that you give a command (e.g. invokes a method), but you're required to check whether the result is set/correct to continue your flow.
 
 e.g.
 
@@ -182,10 +184,109 @@ if result:  # <-- Breaks principle
     keep_flow(result)
 ```
 
-## How to structure them
+## How to structure exceptions
 
-You might have noticed that we are able to extract data form the e
+The Effective Python book on Chapter 7 Item 51 suggests ["**Define a root exception to insulate callers from APIs**"](https://github.com/SigmaQuan/Better-Python-59-Ways/blob/master/item_51_define_a_root_exception.py), which means in my humble opinion "categorizing" your exceptions.
 
+### Extending and categorizing
+
+Always start with a base exception for a specific "module" or domain. It basically means having a dummy base and keep extending it.
+
+Here's more real-world examples:
+
+```py
+# Dummy category
+class OnfleetTasksException(Exception):
+    pass
+
+
+# Base group category
+class StoreTaskFailed(OnfleetTasksException):
+    def __init__(self):
+        message = "Storing task at the database error"  # Defines default message that can be overwritten
+        super().__init__(message)
+
+
+# Specific WHAT exception
+class StorePickUpTaskFailed(StoreTaskFailed):
+    def __init__(self, order_id, pick_up_id):
+        message = (  # Sets specific message intended for engineers to debug
+            "An error occurred while storing pickup task info into the database\n"
+            f"Order ID: {order_id}\n"
+            f"Pickup task ID: {pick_up_id}"
+        )
+        self.pick_up_task_id = pick_up_id  # Sets context
+        super().__init__(message)
+
+
+# Specific WHAT exception
+class StoreDropOffTaskFailed(StoreTaskFailed):
+    def __init__(self, order_id, pick_up_id, drop_off_id):
+        message = (  # Sets specific message intended for engineers to debug
+            "An error occurred while storing drop off task info into the database\n"
+            f"Order ID: {order_id}\n"
+            f"Pickup task ID: {pick_up_id}\n"
+            f"Dropoff task ID: {drop_off_id}"
+        )
+        self.drop_off_task_id = drop_off_id  # Sets context
+        super().__init__(message)
+```
+
+This structure allows you to either isolate known from unknown, and to handle them by category:
+
+#### Isolate known exceptions from unknown:
+
+By doing that you can trigger differents kinds of alarms:
+
+```py
+try:
+    do_work()
+except OnfleetTasksException:
+    logger.exception("Something known happened")
+except Exception:
+    logger.critical("Something UNEXPECTED happened", exc_info=True)
+```
+
+In general, an unknown error is very serious and requires immediate response because it means that for sure your software can't heal itself.
+
+#### Handle exceptions by category:
+
+You can have different response to different group of issues:
+
+```py
+try:
+    do_work()
+except StoreTaskFailed:
+    alert_data_team("Some database operation failed")
+except OnfleetApiFailed as error:
+    alert_support_team(f"A request to '{error.endpoint}' failed with {error.status_code} status code")
+```
+
+We can trigger different alerts based on the group of issue. For this case you got: Database or API groups.
+
+### Exceptions are beyond messages, they provide context
+
+Ensure that the exception you're creating can give you context. "Request failed" is too shallow - what request? what endpoint? what response we got?
+
+You might have noticed that we are able to extract relevant data from exceptions to handle issues, like:
+
+```py
+try:
+    ...
+except exceptions.StorePickUpTaskFailed as error:
+    self._delete_task(error.pick_up_task_id)  # <-- extract id for delete
+except exceptions.StoreDropOffTaskFailed as error:
+    self._delete_task(error.drop_off_task_id) # <-- extract id for delete
+
+# OR
+
+try:
+    ...
+except OnfleetApiFailed as error:
+    alert_support_team(f"A request to '{error.endpoint}' failed with {error.status_code} status code")  # <-- Extract endpoint/status code
+```
+
+Always ask yourself: "If this exception is raised, what do I need to to know to keep investigating, or to prevent the issue from getting worse?"
 
 ## Real-life examples
 
