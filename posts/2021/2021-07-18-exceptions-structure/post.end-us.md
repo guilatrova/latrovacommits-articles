@@ -290,7 +290,21 @@ Always ask yourself: "If this exception is raised, what do I need to to know to 
 
 ### Combine exceptions
 
-example: Django API exceptions
+By having specific exceptions you can also combine them with more thanks to Python's support to multiple inheritance.
+
+For example, in [Django](https://github.com/django/django) with [Django Rest Framework](https://www.django-rest-framework.org/), If you wish to raise a specific exception with a custom message, but also trigger a `503` status code you can inherit from [`APIException`](https://www.django-rest-framework.org/api-guide/exceptions/#apiexception):
+
+```py
+class OnfleetApiFailed(APIException, OnfleetTasksException):  # <-- Inherit from 2 instances, belongs to 2 groups
+    status_code = 503
+    default_detail = 'Onfleet temporarily unavailable, try again later.'
+    default_code = 'service_unavailable'
+
+    def __init__(self, endpoint, onfleet_response_status_code):
+        ...
+```
+
+You keep your original grouping (belongs to your system API exception), and allows the framework (DRF in this case) to handle it.
 
 ### Where to place exceptions
 
