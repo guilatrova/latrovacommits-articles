@@ -362,9 +362,9 @@ from api.exceptions import OnfleetApiFailed  # Also clear and expected
 
 ![django exceptions tree](django-exceptions.png)
 
-Django is very interesting because it allows you to identify a [**specific model** that does not exists](https://docs.djangoproject.com/en/3.2/ref/models/class/#doesnotexist).
+Django is very interesting because it allows you to identify a [**specific model** that does not exist](https://docs.djangoproject.com/en/3.2/ref/models/class/#doesnotexist).
 
-[**SQLAlchemy**](https://github.com/sqlalchemy/sqlalchemy) is a bit different, but also has a similar structure. It splits exceptions into [core](https://docs.sqlalchemy.org/en/14/core/exceptions.html) and [ORM](https://docs.sqlalchemy.org/en/14/orm/exceptions.html), and most exceptions inherit from the base (not dummy though) `SQLAlchemyError`.
+[**SQLAlchemy**](https://github.com/sqlalchemy/sqlalchemy) is a bit different but also has a similar structure. It splits exceptions into [core](https://docs.sqlalchemy.org/en/14/core/exceptions.html) and [ORM](https://docs.sqlalchemy.org/en/14/orm/exceptions.html), and most exceptions inherit from the base (not dummy though) `SQLAlchemyError`.
 
 ## 💓 Do you love real-life examples?
 
